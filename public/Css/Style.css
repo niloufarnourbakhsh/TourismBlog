@@ -1,0 +1,183 @@
+:root {
+    --cover: rgba(0, 0, 0, 0.6);
+    --green: #5d7c6f;
+    --red_1: #ac112b;
+    --headers: #bac7c6;
+    --body-color: #e2e2d8;
+    --creamy: #bba695;
+    --brown: #a3896e;
+    --footer: #403938;
+    --notify_color: #d0e9e8;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+    border-bottom: none
+}
+
+@font-face {
+    font-family: 'Gandom';
+    src: url("../fonts/Gandom-FD.eot");
+    src: url("../fonts/Gandom-FD.woff") format('woff');
+}
+
+body {
+    font-family: "Gandom", Arial !important;
+    font-weight: normal;
+    direction: rtl !important;
+    font-size: 14px;
+}
+
+label {
+    font-weight: bold;
+
+}
+
+/*utility classes*/
+.clr {
+    clear: both;
+}
+
+.hr {
+    width: 300px;
+    height: 2px;
+}
+
+/*utility classes*/
+.logo {
+    color: var(--green) !important;
+}
+
+#showcase #menu {
+    width: 100vw;
+    height: 10vh;
+    font-size: 16px;
+}
+
+#showcase {
+    width: 100vw;
+    height: 100vh;
+    background: url("../images/IMG_2714.JPG") no-repeat fixed center center/cover
+}
+
+#showcase .cover {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    top: 0;
+    right: 0;
+    background-color: var(--cover);
+}
+
+.content {
+    height: 73vh;
+}
+
+#my-dropdown-style {
+    font-family: Gandom, Tahoma;
+}
+
+.my-nav-style {
+    font-size: 18px;
+}
+
+#screen-bg {
+    background-color: var(--body-color)
+}
+
+.img-size {
+    height: 180px !important;
+    width: 100%;
+}
+
+#image-section {
+    height: 70vh;
+}
+
+.bg-green {
+    background-color: var(--green) !important;
+}
+
+.bg-cream {
+    background-color: var(--creamy) !important;
+}
+
+.bg-for-headers {
+    background-color: var(--headers)
+}
+
+.bg-brown {
+    background-color: var(--brown) !important;
+}
+
+.top-border {
+    border-top: 2px solid var(--creamy)
+}
+
+.bg-dark-red {
+    background-color: var(--red_1) !important;
+}
+
+.bg-notification {
+    background-color: var(--notify_color)
+}
+
+.text_red {
+    color: var(--red_1) !important;
+}
+
+.img-overlay {
+    background-color: var(--cover);
+}
+
+.form-border {
+    border: var(--creamy) 2px solid;
+}
+
+#bigImage {
+    width: 100%;
+    height: 60vh;
+}
+
+.red-color {
+    color: #a00429
+}
+
+.img-style:hover {
+    cursor: pointer
+}
+
+#re-box {
+    display: none
+}
+
+footer {
+    background-color: var(--footer);
+}
+
+.toChoose {
+    border: none !important;
+}
+
+.page-link {
+    color: var(--red_1) !important;
+}
+
+#error {
+    background-color: var(--green);
+}

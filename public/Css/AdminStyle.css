@@ -1,0 +1,41 @@
+:root{
+    --black: #000312;
+    --black-cover: rgba(0,0,0,0.6);
+    --delete: #d4464b;
+    --show: #55833b;
+    --edit: #f59d40;
+    --ligh-color: #c9e6e1;
+    --white: #ffffff;
+    --purple: #6b4780;
+    --delete-2:#0e1727;
+}
+body#admin{
+    background: linear-gradient(to right,#e98821,#e2911f);
+    direction: rtl;
+}
+/*utility classes*/
+.bg-black{ background-color: var(--black)}
+
+#admin-nav ul li:not(:last-child){
+    border-bottom: 2px solid var(--edit);
+    transition: all 0.7s;
+}
+#admin-nav-2{ font-size: 18px}
+#admin-nav ul li a:hover{
+    padding-right: 20px;
+}
+.bg-white-admin{
+    background-color: var(--white);
+}
+.admin-hr{
+    width: 85%;
+    height: 2px;
+}
+.table-style{ height: 55vh}
+.number-part{ height: 4vh}
+#admin-content{ min-height: 90vh}
+.text-edition{ color: var(--edit)}
+.text-delete{ color: var(--delete)}
+.text-show{ color: var(--show)}
+.bg-purple{ background-color: var(--purple) !important;}
+.bg-delete{ background-color: var(--delete-2) !important;}
