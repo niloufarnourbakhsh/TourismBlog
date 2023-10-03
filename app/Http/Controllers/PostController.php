@@ -124,9 +124,8 @@ class PostController extends Controller
     }
     public function active(Request $request, Post $post)
     {
-
         $post->update([
-            'is_active' => $request->is_active
+            'is_active'=>$request->is_active,
         ]);
         return redirect()->back();
     }

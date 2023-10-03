@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Events\DeleteNotificationEvent;
+use App\Events\InserPhoto;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Post;
@@ -9,6 +11,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Notifications\PostLikeNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
@@ -53,6 +56,7 @@ class likeTest extends TestCase
     /** @test */
     public function unlike_a_post()
     {
+
         Notification::fake();
         Notification::assertNothingSent();
         $post=Post::factory()->create();
@@ -62,6 +66,9 @@ class likeTest extends TestCase
         Notification::assertSentTo($this->user,PostLikeNotification::class);
         Notification::assertCount(1);
         $this->actingAs($this->user)->post('/posts/like/'.$post->id);
+        Event::fake();
+        Event::dispatch(DeleteNotificationEvent::class);
+        Event::assertDispatched(DeleteNotificationEvent::class);
     }
 
     /** @test */

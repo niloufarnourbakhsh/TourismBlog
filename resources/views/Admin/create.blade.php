@@ -48,9 +48,9 @@
                                id="food" value="{{old('food')}}">
                     </div>
                     <div @class(['form-group'])>
-                        <label id="sightseeing">مکانهای دیدنی</label>
-                        <input type="text" class="form-control" name="sightseeing"
-                               id="sightseeing" value="{{old('sightseeing')}}">
+                        <label id="touristAttraction">مکانهای دیدنی</label>
+                        <input type="text" class="form-control" name="touristAttraction"
+                               id="touristAttraction" value="{{old('touristAttraction')}}">
                     </div>
 
                     <div class="form-control">

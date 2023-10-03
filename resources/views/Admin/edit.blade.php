@@ -56,9 +56,9 @@
                                id="food" value="{{$post->food}}">
                     </div>
                     <div @class(['form-group'])>
-                        <label id="sightseeing" >مکانهای دیدنی</label>
-                        <input type="text" class="form-control" name="sightseeing"
-                               id="sightseeing" value="{{$post->sightseeing}}">
+                        <label id="touristAttraction" >مکانهای دیدنی</label>
+                        <input type="text" class="form-control" name="touristAttraction"
+                               id="touristAttraction" value="{{$post->touristAttraction}}">
                     </div>
 
                     <div class="form-control">

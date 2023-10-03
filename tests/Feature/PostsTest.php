@@ -32,7 +32,6 @@ class PostsTest extends TestCase
     /** @test */
     public function a_post_can_create()
     {
-
         $this->actingAs($this->user)->post('/posts/', $this->data());
         $this->assertCount(1, Post::all());
     }
@@ -76,7 +75,24 @@ class PostsTest extends TestCase
         $response->assertSessionDoesntHaveErrors('touristAttraction');
 
     }
+    /** @test */
+    public function check_uploading_photo_of_a_post()
+    {
+//        $this->withoutExceptionHandling();
+//        Event::assertNotDispatched(InserPhoto::class);
+        Storage::fake('public');
+        $file=UploadedFile::fake()->image('ahvaz.jpg');
+        $this->actingAs($this->user)->post('/posts/', $this->data());
+        $this->assertCount(1, Post::all());
+        $this->assertCount(1, Photo::all());
+        Event::fake();
+        Event::dispatch(InserPhoto::class);
+        Event::assertDispatched(InserPhoto::class);
+        $photo = Photo::first();
+        $this->assertNotNull($photo->path);
+        Storage::disk('public')->assertExists('images/', $file->name);
 
+    }
     /** @test */
     public function just_admin_can_create_a_post()
     {
@@ -87,27 +103,6 @@ class PostsTest extends TestCase
         $response->assertRedirect('/login');
     }
 
-    /** @test */
-    public function see_if_the_event_for_uploading_images_works()
-    {
-        Event::fake();
-        Event::assertNotDispatched(InserPhoto::class);
-        Event::dispatch(InserPhoto::class);
-        Event::assertDispatched(InserPhoto::class);
-    }
-
-    /** @test */
-    public function check_if_the_photo_is_uploaded()
-    {
-        Storage::fake('public');
-        $file = UploadedFile::fake()->image('ahvaz.jpg');
-        $this->actingAs($this->user)->post('/posts/', $this->data());
-        $this->assertCount(1, Post::all());
-        $this->assertCount(1, Photo::all());
-        $photo = Photo::first();
-        $this->assertNotNull($photo->path);
-        Storage::disk('public')->assertExists('images/', $file->name);
-    }
 
     /** @test */
     public function deleted_a_photo()
@@ -164,7 +159,7 @@ class PostsTest extends TestCase
     }
 
     /** @test */
-    public function a_post_can_become_inactive()
+    public function activity_of_the_post_can_change()
     {
         $this->actingAs($this->user)->post('/posts/', $this->data());
         $post = Post::first();
@@ -174,6 +169,18 @@ class PostsTest extends TestCase
             ]);
         $this->assertEquals(0, Post::first()->is_active);
     }
+//
+//    /** @test */
+//    public function a_post_can_become_inactive()
+//    {
+//        $this->actingAs($this->user)->post('/posts/', $this->data());
+//        $post = Post::first();
+//        $this->actingAs($this->user)
+//            ->patch('/posts/active/' . $post->id, [
+//                'is_active' => '0'
+//            ]);
+
+//    }
 
     /** @test */
     public function a_post_can_be_updated()
