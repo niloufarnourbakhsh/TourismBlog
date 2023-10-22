@@ -11,6 +11,7 @@ class Post extends Model
     use HasFactory;
     use Sluggable;
     protected $guarded;
+    protected $with=['photos'];
     public function sluggable(): array
     {
         return [

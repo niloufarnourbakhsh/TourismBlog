@@ -68,7 +68,7 @@ class PostController extends Controller
     {
         if (\request()->category){
 
-            $posts=Post::query()->with(['category','photos'])
+            $posts=Post::query()->with(['category'])
                 ->where(['is_active'=>1])
                 ->whereHas('category',function ($query){
                     $query->where('name', request()->category);
