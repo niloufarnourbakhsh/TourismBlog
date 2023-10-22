@@ -3,11 +3,9 @@
     <div class="container">
 
     <ul class="nav my-nav-style pr-3 pl-3" >
-        @if(\Illuminate\Support\Facades\Auth::check())
-            @if(\Illuminate\Support\Facades\Auth::user()->IsAdmin())
-                <li class="nav-item"><a href="{{route('posts.index')}}" class="nav-link text_red">  مدیریت</a></li>
-            @endif
-        @endif
+        @can('is_admin')
+            <li class="nav-item"><a href="{{route('posts.index')}}" class="nav-link text_red" >  مدیریت</a></li>
+        @endcan
         <li class="nav-item"><a href="{{route('gallery')}}" class="nav-link text_red"> گالری </a></li>
         <li class="nav-item"><a href="{{route('contact.us')}}" class="nav-link text_red">تماس با ما</a></li>
         <li class="nav-item"><a href="{{route('about.us')}}" class="nav-link text_red"> درباره ی ما </a></li>

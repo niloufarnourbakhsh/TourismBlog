@@ -25,7 +25,7 @@ Route::get('/', function () {
     return view('main');
 })->name('main');
 
-Route::middleware(IsAdmin::class)->group(function (){
+Route::middleware('can:is_admin')->group(function (){
 
     Route::get('/users',[UserController::class,'index'])->name('users');
     Route::get('/notifications',[NotificationController::class,'notification'])->name('notifications');
