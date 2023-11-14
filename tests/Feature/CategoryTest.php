@@ -33,7 +33,7 @@ class CategoryTest extends TestCase
     {
         $this->post('/categories',[
             'name'=>'nature'
-        ])->assertRedirect('/login');
+        ])->assertStatus(403);
     }
 
     /** @test */

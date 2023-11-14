@@ -100,7 +100,7 @@ class PostsTest extends TestCase
         $this->assertCount(1, Post::all());
         Auth::logout();
         $response = $this->post('/posts/', $this->data());
-        $response->assertRedirect('/login');
+        $response->assertStatus(403);
     }
 
 
