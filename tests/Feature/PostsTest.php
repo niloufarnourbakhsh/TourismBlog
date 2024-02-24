@@ -78,7 +78,7 @@ class PostsTest extends TestCase
     /** @test */
     public function check_uploading_photo_of_a_post()
     {
-//        $this->withoutExceptionHandling();
+
 //        Event::assertNotDispatched(InserPhoto::class);
         Storage::fake('public');
         $file=UploadedFile::fake()->image('ahvaz.jpg');
@@ -150,7 +150,7 @@ class PostsTest extends TestCase
     /** @test */
     public function show_one_post()
     {
-        $this->withoutExceptionHandling();
+
         $post = Post::factory(City::create(['name' => 'ahvaz']))->create();
         Photo::create(['path' => 'ax.jpg', 'post_id' => $post->id]);
         $this->get('/posts/' . $post->slug)->assertStatus(200)
@@ -169,18 +169,6 @@ class PostsTest extends TestCase
             ]);
         $this->assertEquals(0, Post::first()->is_active);
     }
-//
-//    /** @test */
-//    public function a_post_can_become_inactive()
-//    {
-//        $this->actingAs($this->user)->post('/posts/', $this->data());
-//        $post = Post::first();
-//        $this->actingAs($this->user)
-//            ->patch('/posts/active/' . $post->id, [
-//                'is_active' => '0'
-//            ]);
-
-//    }
 
     /** @test */
     public function a_post_can_be_updated()
