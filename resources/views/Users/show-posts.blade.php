@@ -103,7 +103,7 @@
                                         </form>
                                     </div>
 
-                                    @if(\Illuminate\Support\Facades\Auth::id()===$comment->user_id || \Illuminate\Support\Facades\Auth::user()->IsAdmin())
+                                   @can('delete_comment',$comment)
                                         <form action="{{route('comment.delete',$comment->id)}}" method="post">
                                             @csrf
                                             @method('DELETE')
@@ -111,7 +111,7 @@
                                                 <i class="fa-regular fa-square-minus "></i>
                                             </button>
                                         </form>
-                                    @endif
+                                    @endcan
                                 @endif
 
                             </div>
