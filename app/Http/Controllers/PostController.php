@@ -30,11 +30,7 @@ class PostController extends Controller
     }
     public function store(CreatePostRequest $request)
     {
-        $data=array_merge($request->only('title','body','food','touristAttraction','category_id'),[
-            'user_id'=>Auth::id(),
-            'city_id'=>(City::create(['name'=>$request->city]))->id
-        ]);
-        $post=Post::create($data);
+        $post=$request->createPost();
         $images=$request->file;
         event(new InserPhoto($post,$images));
         return redirect()->back();

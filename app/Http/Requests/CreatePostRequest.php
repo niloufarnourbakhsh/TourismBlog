@@ -2,7 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Models\City;
+use App\Models\Post;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Gate;
 
 class CreatePostRequest extends FormRequest
 {
@@ -11,7 +15,7 @@ class CreatePostRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return Gate::allows('is_admin');
     }
 
     /**
@@ -26,7 +30,24 @@ class CreatePostRequest extends FormRequest
             'body'=>'required',
             'city'=>'required',
             'file'=>'required',
-            'category_id'=>'required'
+            'category_id'=>'required',
+            'food'=>'sometimes',
+            'touristAttraction'=>'sometimes',
         ];
+    }
+
+    public function addCity()
+    {
+       return City::create(['name'=>$this->city]);
+    }
+
+    public function createPost()
+    {
+
+        $data=array_merge($this->only('title','body','food','touristAttraction','category_id'),[
+            'city_id'=>$this->addCity()->id,
+            'user_id'=>auth()->id()
+        ]);
+      return  Post::create($data);
     }
 }
