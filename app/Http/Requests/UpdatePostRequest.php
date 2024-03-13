@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\City;
+use App\Models\Post;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class UpdatePostRequest extends FormRequest
 {
@@ -11,7 +14,7 @@ class UpdatePostRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return Gate::allows('is_admin');
     }
 
     /**
@@ -25,7 +28,20 @@ class UpdatePostRequest extends FormRequest
             'title'=>'required',
             'body'=>'required',
             'city'=>'required',
-            'category_id'=>'required'
+            'cityId'=>'required',
+            'category_id'=>'required',
+            'food'=>'sometimes',
+            'touristAttraction'=>'sometimes',
+            'file'=>'sometimes',
         ];
+    }
+
+    public function updateCity()
+    {
+        return City::whereId($this->cityId)->update(['name'=>$this->city]);
+    }
+    public function save()
+    {
+        return tap($this->route('post')->update($this->except(['city','cityId','file'])));
     }
 }

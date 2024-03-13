@@ -173,6 +173,7 @@ class PostsTest extends TestCase
     /** @test */
     public function a_post_can_be_updated()
     {
+        $this->withoutExceptionHandling();
         $this->actingAs($this->user)->post('/posts/', $this->data());
         $post = Post::first();
         $this->actingAs($this->user)->patch('/posts/' . $post->id, [

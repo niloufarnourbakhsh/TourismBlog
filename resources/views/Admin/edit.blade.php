@@ -18,23 +18,25 @@
                     @method('PUT')
                     <div class="form-group">
                         <label for="title">عنوان</label>
-                        <input  class="form-control" name="title" id="title" value="{{$post->title}}">
+                        <input class="form-control" name="title" id="title" value="{{$post->title}}">
                         @if($errors->first('title'))
                             <p class="text-danger fw-bolder">{{$errors->first('title')}}</p>
                         @endif
                     </div>
                     <div class="form-group">
                         <label for="city">شهر</label>
-                        <input  class="form-control" name="city" id="city" value="{{$post->city->name}}">
+                        <input class="form-control" name="city" id="city" value="{{$post->city->name}}">
                         @if($errors->first('city'))
                             <p class="fw-bolder">{{$errors->first('city')}}</p>
                         @endif
+                        <input type="hidden" value="{{$post->city->id}}" name="cityId">
                     </div>
                     <div class="form-group">
-                        <label for="city" > دسته بندی</label>
+                        <label for="category_id"> دسته بندی</label>
                         <select name="category_id" class="form-control">
                             @foreach($categories as $category)
-                                <option value="{{$category->id}}" @if($category->id===$post->categoty_id) selected @endif>{{$category->name}}</option>
+                                <option value="{{$category->id}}"
+                                        @if($category->id===$post->categoty_id) selected @endif>{{$category->name}}</option>
                             @endforeach
                         </select>
                         @if($errors->first('category_id'))
@@ -51,18 +53,18 @@
                     </div>
                     <div @class(['form-group'])>
 
-                        <label for="food")> غذاهای سنتی</label>
+                        <label for="food"> غذاهای سنتی</label>
                         <input type="text" class="form-control" name="food"
                                id="food" value="{{$post->food}}">
                     </div>
                     <div @class(['form-group'])>
-                        <label id="touristAttraction" >مکانهای دیدنی</label>
+                        <label id="touristAttraction">مکانهای دیدنی</label>
                         <input type="text" class="form-control" name="touristAttraction"
                                id="touristAttraction" value="{{$post->touristAttraction}}">
                     </div>
 
                     <div class="form-control">
-                        <label for="photo" >تصاویر</label>
+                        <label for="photo">تصاویر</label>
                         <input type="file" name="file[]" id="photo" accept="image/*"
                                multiple class="form-control ">
                         @if($errors->first('file'))
@@ -81,7 +83,8 @@
                     @foreach($post->photos as $photo)
                         <div class="col my-1">
                             <div class="card">
-                                <img src="{{url('/storage/'.$photo->path)}}" class="card-img-top" alt="..." style="max-height: 200px">
+                                <img src="{{url('/storage/'.$photo->path)}}" class="card-img-top" alt="..."
+                                     style="max-height: 200px">
                                 <div class="card-footer bg-delete">
                                     <form action="{{route('photo',[$post->id,$photo->id])}}" method="post">
                                         @method('DELETE')

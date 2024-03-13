@@ -44,15 +44,8 @@ class PostController extends Controller
 
     public function update(UpdatePostRequest $request,Post $post)
     {
-        City::whereId($request->cityId)->update(['name'=>$request->city]);
-        $post->update([
-            'title'=>$request->title,
-            'body'=>$request->body,
-            'food'=>$request->food,
-            'category_id'=>$request->category_id,
-            'touristAttraction'=>$request->touristAttraction,
-        ]);
-
+        $request->updateCity();
+        $request->save();
         if ($images=$request->file){
             event(new InserPhoto($post,$images));
         }
