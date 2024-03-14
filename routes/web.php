@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function (){
     Route::post('/posts/like/{post}', [PostController::class, 'storeLikes'])->name('like.post');
     Route::post('/comment/{post}',[CommentController::class,'store'])->name('comment.store');
     Route::delete('/comment/{comment}',[CommentController::class,'delete'])->name('comment.delete');
-    Route::post('/comment/like/{comment}',[CommentController::class,'likeStore'])->name('like.comment');
+    Route::post('/comment/like/{comment}',[CommentController::class,'LikeComment'])->name('like.comment');
 });
 Route::get('/contact-us',[ContactController::class,'create'])->name('contact.us');
 Route::post('/contact-us',[ContactController::class,'submit'])->name('contact.us.submit');

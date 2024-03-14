@@ -12,13 +12,13 @@ use Illuminate\Support\Facades\Session;
 
 class CommentController extends Controller
 {
-    public function store(CommentCreateRequest $request,Post $post)
+    public function store(CommentCreateRequest $request, Post $post)
     {
         Auth::user()->comments()->create([
-            'body'=>$request->body,
-            'post_id'=>$post->id
+            'body' => $request->body,
+            'post_id' => $post->id
         ]);
-        Notification::send($post->user,new CommentNotification(Auth::user()));
+        Notification::send($post->user, new CommentNotification(Auth::user()));
         return redirect()->back();
     }
 
@@ -29,17 +29,9 @@ class CommentController extends Controller
         return redirect()->back();
     }
 
-    public function likeStore(Comment $comment)
+    public function LikeComment(Comment $comment)
     {
-        if ($comment->likes()->count()===0){
-
-            $comment->likes()->create(['user_id'=>Auth::id()]);
-        }else{
-            $comment->likes()->where(['user_id'=>Auth::id()])->first()?
-                $comment->likes()->where(['user_id'=>Auth::id()])->delete():
-                $comment->likes()->create(['user_id'=>Auth::id()]);
-
-        }
+        $comment->AddLike();
         return redirect()->back();
     }
 
