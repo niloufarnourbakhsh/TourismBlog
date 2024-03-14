@@ -71,32 +71,19 @@ class PostController extends Controller
     {
         $post->increment('view');
         $post->with(['city','photos','likes','comments']);
-        $is_liked=false;
-        if (Auth::check()){
-            $is_liked=$post->likes()->where(['user_id'=>Auth::id()])->first()?true :false;
-        }
+        $is_liked=$post->showLikesInPost();
         return view('Users.show-posts')->with('post',$post)->with('is_liked',$is_liked);
     }
 
     public function storeLikes(Post $post)
     {
-        if ($post->likes()->count()===0) {
-            $like=$post->likes()->create(['user_id' => Auth::id()]);
-
-            Notification::send($post->user, new PostLikeNotification(\auth()->user(),$like, $post));
-        }else{
-
-            $like=$post->likes()->where(['user_id'=>Auth::id()])->first();
-                $like?
-                event(new DeleteNotificationEvent($post,$like))
-                &&
-                $post->likes()->where(['user_id'=>Auth::id()])->delete()
-                :
-                $post->likes()->create(['user_id'=>Auth::id()]);
-                Notification::send($post->user,new PostLikeNotification(\auth()->user(),$like,$post));
-
+        if ($post->likes()->count() === 0) {
+            $like = $post->likes()->create(['user_id' => Auth::id()]);
+            Notification::send($post->user, new PostLikeNotification(\auth()->user(), $like, $post));
+        } else {
+            $like = $post->likes()->where(['user_id' => Auth::id()])->first();
+            $like ? $post->takeLikeBack($like) : $post->likePost();
         }
-
         return redirect()->back();
     }
     public function destroy(Post $post)
