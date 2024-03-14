@@ -173,7 +173,7 @@ class PostsTest extends TestCase
     /** @test */
     public function a_post_can_be_updated()
     {
-        $this->withoutExceptionHandling();
+//        $this->withoutExceptionHandling();
         $this->actingAs($this->user)->post('/posts/', $this->data());
         $post = Post::first();
         $this->actingAs($this->user)->patch('/posts/' . $post->id, [
@@ -187,6 +187,7 @@ class PostsTest extends TestCase
             'category_id' => 1,
             'is_active' => 1
         ]);
+        $post = Post::first();
         $this->assertEquals('Tehran', Post::first()->title);
         $this->assertEquals('Tehran', Post::first()->city->name);
         $this->assertEquals('this body is for editing the post', Post::first()->body);

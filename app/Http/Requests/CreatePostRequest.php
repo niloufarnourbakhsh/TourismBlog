@@ -36,16 +36,11 @@ class CreatePostRequest extends FormRequest
         ];
     }
 
-    public function addCity()
-    {
-       return City::create(['name'=>$this->city]);
-    }
-
     public function createPost()
     {
 
         $data=array_merge($this->only('title','body','food','touristAttraction','category_id'),[
-            'city_id'=>$this->addCity()->id,
+            'city_id'=>City::create(['name'=>$this->city])->id,
             'user_id'=>auth()->id()
         ]);
       return  Post::create($data);

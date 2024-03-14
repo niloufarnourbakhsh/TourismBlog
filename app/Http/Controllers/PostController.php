@@ -44,7 +44,6 @@ class PostController extends Controller
 
     public function update(UpdatePostRequest $request,Post $post)
     {
-        $request->updateCity();
         $request->save();
         if ($images=$request->file){
             event(new InserPhoto($post,$images));
@@ -113,9 +112,7 @@ class PostController extends Controller
     }
     public function active(Request $request, Post $post)
     {
-        $post->update([
-            'is_active'=>$request->is_active,
-        ]);
+        $post->update(['is_active' => $request->is_active,]);
         return redirect()->back();
     }
 }

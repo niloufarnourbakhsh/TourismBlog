@@ -42,6 +42,7 @@ class UpdatePostRequest extends FormRequest
     }
     public function save()
     {
+        $this->updateCity();
         return tap($this->route('post')->update($this->except(['city','cityId','file'])));
     }
 }
