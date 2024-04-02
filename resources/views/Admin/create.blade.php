@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row">
             <div class="col-6 align-self-end d-flex flex-column p-4 my-3">
-                <h6 class="bg-green text-white p-2 rounded mb-3 mx-2"> افزودن مطلب جدید</h6>
+                <h6 class="bg-orange text-white p-2 rounded mb-3 mx-2"> افزودن مطلب جدید</h6>
                 <form action="{{route('posts.store')}}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
@@ -62,7 +62,7 @@
                         @endif
                     </div>
                     <div class="d-grid gap-2 ">
-                        <button class="btn bg-green text-white" type="submit">ذخیره</button>
+                        <button class="btn bg-orange text-white" type="submit">ذخیره</button>
                     </div>
 
                 </form>

@@ -14,7 +14,7 @@
                             <label for="name" class="text-white">نام گروه</label>
                             <input type="text" name="name" id="name" class="form-control">
                             <div class="d-grid gap-2 mt-2">
-                                <button class="btn bg-green text-white" type="submit">ذخیره</button>
+                                <button class="btn bg-orange text-white " type="submit">ذخیره</button>
                             </div>
                         </form>
 
@@ -41,7 +41,7 @@
                                 <div class="d-flex flex-row text-right justify-content-around">
                                     <input type="text" name="name"  value="{{$category->name}}"
                                            class="form-control" required>
-                                    <button type="submit" class="btn bg-green text-white">ویرایش </button>
+                                    <button type="submit" class="btn bg-orange text-white">ویرایش </button>
                                 </div>
                             </form>
                         </td>

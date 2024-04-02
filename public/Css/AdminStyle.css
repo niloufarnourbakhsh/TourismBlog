@@ -8,16 +8,17 @@
     --white: #ffffff;
     --purple: #6b4780;
     --delete-2:#0e1727;
+    --border-color: #e39e50;
 }
 body#admin{
-    background: linear-gradient(to right,#e98821,#e2911f);
+    background: linear-gradient(to right,#0d5943,#36715a);
     direction: rtl;
 }
 /*utility classes*/
 .bg-black{ background-color: var(--black)}
 
 #admin-nav ul li:not(:last-child){
-    border-bottom: 2px solid var(--edit);
+    border-bottom: 2px solid var(--border-color);
     transition: all 0.7s;
 }
 #admin-nav-2{ font-size: 18px}

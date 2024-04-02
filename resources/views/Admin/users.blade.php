@@ -3,7 +3,7 @@
 @section('content')
     <div class="mt-4 mx-2">
         <div class="row">
-            <h6 class="col-3 bg-green text-white p-2 rounded mb-3 mx-2">لیست اعضا</h6>
+            <h6 class="col-3 bg-orange text-white p-2 rounded mb-3 mx-2">لیست اعضا</h6>
             <div class="col-3">
             @if(\Illuminate\Support\Facades\Session::has('users-delete'))
                 <p class="bg-dark-red text-white col-6">

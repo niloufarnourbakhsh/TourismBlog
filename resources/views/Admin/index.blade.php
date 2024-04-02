@@ -4,7 +4,7 @@
     <div class="mt-4 mx-2">
         <div class="container-fluid">
             <div class="row">
-                <h6 class=" col-3 bg-green text-white p-2 rounded mb-3 mx-2"> مطالب منتشر شده</h6>
+                <h6 class=" col-3 bg-orange text-white p-2 rounded mb-3 mx-2"> مطالب منتشر شده</h6>
                 <div class="col-3"></div>
                 <div class="col-5">
                     @if(\Illuminate\Support\Facades\Session::has('post-deletion'))
@@ -44,7 +44,7 @@
                                     @csrf
                                     @method('PATCH')
                                     <input type="hidden" value="{{0}}" name="is_active">
-                                    <button class="btn bg-green text-white" type="submit">عدم نمایش</button>
+                                    <button class="btn bg-orange text-white" type="submit">عدم نمایش</button>
                                 </form>
                             @else
                                 <form action="{{route('posts.active',[$post->id])}}" method="post">

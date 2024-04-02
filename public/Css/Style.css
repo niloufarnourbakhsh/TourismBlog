@@ -6,6 +6,7 @@
     --body-color: #e2e2d8;
     --creamy: #bba695;
     --brown: #a3896e;
+    --orange :#b75f1b;
     --footer: #403938;
     --notify_color: #d0e9e8;
 }
@@ -72,7 +73,7 @@ label {
 #showcase {
     width: 100vw;
     height: 100vh;
-    background: url("../images/IMG_2714.JPG") no-repeat fixed center center/cover
+    background: url("../images/shiraz.jpg") no-repeat fixed center center/cover
 }
 
 #showcase .cover {
@@ -113,8 +114,8 @@ label {
     background-color: var(--green) !important;
 }
 
-.bg-cream {
-    background-color: var(--creamy) !important;
+.bg-orange {
+    background-color: var(--orange) !important;
 }
 
 .bg-for-headers {

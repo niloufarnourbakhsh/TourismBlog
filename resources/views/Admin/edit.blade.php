@@ -4,7 +4,7 @@
 @section('content')
     <div class="container mt-4">
         <div class="row">
-            <h5 class="col-6">ویرایش مطلب</h5>
+            <h6 class="col-6 bg-orange p-2 text-white">ویرایش مطلب</h6>
             @if(\Illuminate\Support\Facades\Session::has("post-edition"))
                 <p class="bg-dark-red text-white p-2 col-6">
                     {{Session('post-edition')}}
@@ -72,7 +72,7 @@
                         @endif
                     </div>
                     <div class="d-grid gap-2 ">
-                        <button class="btn bg-green text-white" type="submit">ذخیره</button>
+                        <button class="btn bg-orange text-white" type="submit">ذخیره</button>
                     </div>
 
                 </form>
