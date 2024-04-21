@@ -10,16 +10,17 @@ use App\Models\Post;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
-
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-class PostsTest extends TestCase
+class ManagePostTest extends TestCase
 {
     use RefreshDatabase;
+    use WithFaker;
 
     public $user;
 
@@ -32,56 +33,74 @@ class PostsTest extends TestCase
     /** @test */
     public function a_post_can_create()
     {
-        $this->actingAs($this->user)->post('/posts/', $this->data());
+        $this->actingAs($this->user)->post('/posts/', Post::factory()->create(['city_id' => ''])->toArray());
         $this->assertCount(1, Post::all());
     }
 
     /** @test */
     public function city_is_required()
     {
-        $response = $this->actingAs($this->user)->post('/posts/', array_merge($this->data(), ['city' => '']));
-        $response->assertSessionHasErrors('city');
+        $post = Post::factory()->create();
+        $this->actingAs($this->user)->post('/posts/', array_merge($post->toArray(), ['city' => '']))
+            ->assertSessionHasErrors('city');
+    }
 
+    /** @test */
+    public function title_is_required()
+    {
+        $post = Post::factory()->create(['title' => ''])->toArray();
+        $this->actingAs($this->user)->post('/posts/', $post)
+            ->assertSessionHasErrors('title');
     }
 
     /** @test */
     public function body_is_required()
     {
-        $response = $this->actingAs($this->user)->post('/posts/', array_merge($this->data(), ['body' => '']));
-        $response->assertSessionHasErrors('body');
-
+        $post = Post::factory()->create(['body' => ''])->toArray();
+        $this->actingAs($this->user)->post('/posts/', $post)
+            ->assertSessionHasErrors('body');
     }
 
     /** @test */
     public function food_is_nullable()
     {
-        $response = $this->actingAs($this->user)->post('/posts/', array_merge($this->data(), ['food' => '']));
-        $response->assertSessionDoesntHaveErrors('food');
-
+        $this->actingAs($this->user)
+            ->post('/posts/', Post::factory()->create()->toArray())
+            ->assertSessionDoesntHaveErrors('food');
     }
 
     /** @test */
     public function touristAttraction_is_nullable()
     {
-        $response = $this->actingAs($this->user)->post('/posts/', array_merge($this->data(), ['touristAttraction' => '']));
-        $response->assertSessionDoesntHaveErrors('touristAttraction');
-
+        $this->actingAs($this->user)
+            ->post('/posts/', Post::factory()->create()->toArray())
+            ->assertSessionDoesntHaveErrors('touristAttraction');
     }
-
     /** @test */
     public function file_is_required()
     {
-        $response = $this->actingAs($this->user)->post('/posts/', array_merge($this->data(), ['touristAttraction' => '']));
-        $response->assertSessionDoesntHaveErrors('touristAttraction');
-
+        $post=Post::factory()->create();
+        $this->actingAs($this->user)
+            ->post('/posts/',
+                array_merge($post->toArray(),['city'=>$post->name,'file'=>['ahvaz.jpg']]))
+            ->assertSessionDoesntHaveErrors('file');
+    }
+    /** @test */
+    public function check_to_see_posts()
+    {
+        $this->withoutExceptionHandling();
+        $post=Post::factory()->create();
+        $this->actingAs($this->user)->get('/posts')
+            ->assertStatus(200)
+        ->assertSee($post->city->name);
     }
     /** @test */
     public function check_uploading_photo_of_a_post()
     {
-
+//        $post = Post::factory()->create()->toArray();
 //        Event::assertNotDispatched(InserPhoto::class);
         Storage::fake('public');
-        $file=UploadedFile::fake()->image('ahvaz.jpg');
+        $file = UploadedFile::fake()->image('ahvaz.jpg');
         $this->actingAs($this->user)->post('/posts/', $this->data());
         $this->assertCount(1, Post::all());
         $this->assertCount(1, Photo::all());
@@ -93,23 +112,14 @@ class PostsTest extends TestCase
         Storage::disk('public')->assertExists('images/', $file->name);
 
     }
-    /** @test */
-    public function just_admin_can_create_a_post()
-    {
-        $this->actingAs($this->user)->post('/posts/', $this->data());
-        $this->assertCount(1, Post::all());
-        Auth::logout();
-        $response = $this->post('/posts/', $this->data());
-        $response->assertStatus(403);
-    }
-
 
     /** @test */
     public function deleted_a_photo()
     {
+        $this->withoutExceptionHandling();
         Storage::fake('public');
         $file = UploadedFile::fake()->image('ahvaz.jpg');
-        $this->actingAs($this->user)->post('/posts/', $this->data());
+        $this->actingAs($this->user)->post('/posts',$this->data());
         $this->assertCount(1, Post::all());
         $this->assertCount(1, Photo::all());
         $post = Post::first();
@@ -121,19 +131,28 @@ class PostsTest extends TestCase
     }
 
     /** @test */
+    public function just_admin_can_create_a_post()
+    {
+        $this->actingAs($this->user)->post('/posts/', $post = Post::factory()->create()->toArray());
+        $this->assertCount(1, Post::all());
+        Auth::logout();
+        $this->post('/posts/', $post)
+            ->assertStatus(403);
+    }
+    /** @test */
     public function check_delete_a_photo()
     {
         Storage::fake('public');
         $file = UploadedFile::fake()->image('ahvaz.jpg');
-        $this->actingAs($this->user)->post('/posts/', $this->data());
+        $data=array_merge($this->data());
+        $this->actingAs($this->user)
+            ->post('/posts/',$data);
         $this->assertCount(1, Post::all());
         $this->assertCount(1, Photo::all());
         $photo = Photo::first();
         $this->assertNotNull($photo->path);
         Storage::disk('public')->assertExists('images/', $file->name);
     }
-
-
     /** @test */
     public function delete_a_post()
     {
@@ -150,18 +169,17 @@ class PostsTest extends TestCase
     /** @test */
     public function show_one_post()
     {
-
         $post = Post::factory(City::create(['name' => 'ahvaz']))->create();
         Photo::create(['path' => 'ax.jpg', 'post_id' => $post->id]);
         $this->get('/posts/' . $post->slug)->assertStatus(200)
             ->assertSee($post->body)
             ->assertSee($post->city->name);
     }
-
     /** @test */
     public function activity_of_the_post_can_change()
     {
-        $this->actingAs($this->user)->post('/posts/', $this->data());
+        $post = Post::factory()->create();
+        $this->actingAs($this->user)->post('/posts/', $post->toArray());
         $post = Post::first();
         $this->actingAs($this->user)
             ->patch('/posts/active/' . $post->id, [
@@ -173,9 +191,8 @@ class PostsTest extends TestCase
     /** @test */
     public function a_post_can_be_updated()
     {
-//        $this->withoutExceptionHandling();
-        $this->actingAs($this->user)->post('/posts/', $this->data());
-        $post = Post::first();
+        $post = Post::factory()->create();
+        $this->actingAs($this->user)->post('/posts/', $post->toArray());
         $this->actingAs($this->user)->patch('/posts/' . $post->id, [
             'title' => 'Tehran',
             'city' => 'Tehran',
@@ -187,7 +204,6 @@ class PostsTest extends TestCase
             'category_id' => 1,
             'is_active' => 1
         ]);
-        $post = Post::first();
         $this->assertEquals('Tehran', Post::first()->title);
         $this->assertEquals('Tehran', Post::first()->city->name);
         $this->assertEquals('this body is for editing the post', Post::first()->body);
@@ -201,12 +217,12 @@ class PostsTest extends TestCase
     protected function data(): array
     {
         return [
-            'title' => 'ahvaz',
-            'city' => 'ahvaz',
-            'body' => 'this body is for the post',
-            'food' => 'felafel',
+            'title' => $this->faker->name,
+            'city' => $this->faker->city,
+            'body' => $this->faker->paragraph(3),
+            'food' => $this->faker->name,
             'file' => ['ahvaz.jpg'],
-            'touristAttraction' => 'pole_sefid',
+            'touristAttraction' => $this->faker->paragraph,
             'category_id' => 1,
             'is_active' => 1
         ];

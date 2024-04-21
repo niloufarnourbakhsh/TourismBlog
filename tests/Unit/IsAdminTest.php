@@ -16,7 +16,6 @@ class IsAdminTest extends TestCase
     /** @test */
     public function admin_role_is_sent_to_is_admin()
     {
-
         $user=User::factory(Role::create(['name'=>'Admin']))->create();
         $this->assertTrue($user->IsAdmin());
     }
@@ -24,6 +23,7 @@ class IsAdminTest extends TestCase
     /** @test */
     public function User_role_is_sent_to_is_admin()
     {
+        $this->withoutExceptionHandling();
         $user=User::factory(Role::create(['name'=>'User']))->create();
         $this->assertFalse($user->IsAdmin());
     }

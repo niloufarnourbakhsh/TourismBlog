@@ -54,7 +54,7 @@ class User extends Authenticatable
 
     public function IsAdmin()
     {
-       return strcmp($this->role->name,'Admin')===0 ?true :false;
+      return  $this->role->name ==='Admin' ? true :false;
 
     }
 }

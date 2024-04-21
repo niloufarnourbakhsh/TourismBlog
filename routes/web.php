@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\PostController;
@@ -26,7 +27,6 @@ Route::get('/', function () {
 })->name('main');
 
 Route::middleware('can:is_admin')->group(function (){
-
     Route::get('/users',[UserController::class,'index'])->name('users');
     Route::get('/notifications',[NotificationController::class,'notification'])->name('notifications');
     Route::get('/notification/markNotification/{id}',[NotificationController::class,'markNotification'])->name('markNotification');
@@ -38,7 +38,7 @@ Route::middleware('can:is_admin')->group(function (){
 });
 
 Route::middleware('auth')->group(function (){
-    Route::post('/posts/like/{post}', [PostController::class, 'storeLikes'])->name('like.post');
+    Route::post('/posts/like/{post}', [LikeController::class, 'store'])->name('like.post');
     Route::post('/comment/{post}',[CommentController::class,'store'])->name('comment.store');
     Route::delete('/comment/{comment}',[CommentController::class,'delete'])->name('comment.delete');
     Route::post('/comment/like/{comment}',[CommentController::class,'LikeComment'])->name('like.comment');

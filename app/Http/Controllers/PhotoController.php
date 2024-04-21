@@ -14,7 +14,6 @@ class PhotoController extends Controller
     public function __invoke(Post $post,Photo $photo)
     {
         if (Photo::where('post_id',$post->id)->count() >1 ){
-
             Storage::disk('public')->delete($photo->path);
             $photo->delete();
             Session::flash('photo_deleted','تصویر مورد نظر پاک شد');

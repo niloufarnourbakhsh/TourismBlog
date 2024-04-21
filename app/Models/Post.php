@@ -25,6 +25,10 @@ class Post extends Model
         ];
     }
 
+    public function path()
+    {
+        return '/posts/'.$this->id;
+    }
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -55,7 +55,6 @@ class PostController extends Controller
     public function all()
     {
         if (\request()->category){
-
             $posts=Post::query()->with(['category'])
                 ->where(['is_active'=>1])
                 ->whereHas('category',function ($query){
@@ -73,18 +72,6 @@ class PostController extends Controller
         $post->with(['city','photos','likes','comments']);
         $is_liked=$post->showLikesInPost();
         return view('Users.show-posts')->with('post',$post)->with('is_liked',$is_liked);
-    }
-
-    public function storeLikes(Post $post)
-    {
-        if ($post->likes()->count() === 0) {
-            $like = $post->likes()->create(['user_id' => Auth::id()]);
-            Notification::send($post->user, new PostLikeNotification(\auth()->user(), $like, $post));
-        } else {
-            $like = $post->likes()->where(['user_id' => Auth::id()])->first();
-            $like ? $post->takeLikeBack($like) : $post->likePost();
-        }
-        return redirect()->back();
     }
     public function destroy(Post $post)
     {

@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\City;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,13 +19,16 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
-            'title'=>$this->faker->title,
-            'user_id' => 1,
-            'city_id' => 1,
+            'title'=>$this->faker->name,
             'body' => $this->faker->paragraph(5),
             'food' => $this->faker->name,
             'category_id'=>1,
             'touristAttraction' => $this->faker->paragraph(1),
+            'user_id' => 1,
+            'slug'=>$this->faker->slug,
+            'city_id' => function(){
+               return City::factory()->create();
+            },
         ];
     }
 }

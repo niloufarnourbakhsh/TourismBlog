@@ -56,7 +56,6 @@ class likeTest extends TestCase
     /** @test */
     public function unlike_a_post()
     {
-
         Notification::fake();
         Notification::assertNothingSent();
         $post=Post::factory()->create();
