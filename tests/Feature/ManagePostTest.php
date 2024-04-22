@@ -7,8 +7,6 @@ use App\Events\InserPhoto;
 use App\Models\City;
 use App\Models\Photo;
 use App\Models\Post;
-use App\Models\Role;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
@@ -21,15 +19,53 @@ class ManagePostTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
-
     /** @test */
-    public function a_post_can_create()
+    public function admin_can_see_the_posts_for_managing_them()
+    {
+        $this->signeIn();
+        $post=Post::factory()->create();
+        $this->get('/posts')
+            ->assertStatus(200)
+            ->assertSee($post->city->name);
+    }
+    /** @test */
+    public function other_users_or_guests_can_not_see_post_management_page()
+    {
+        $this->get('/posts')
+            ->assertStatus(403);
+        $this->userSigneIN();
+        $this->get('/posts')
+            ->assertStatus(403);
+}
+    /** @test */
+    public function Just_admin_see_the_create_page()
+    {
+        $this->signeIn();
+        $this->get('posts/create')->assertStatus(200);
+    }
+    /** @test */
+    public function other_users_or_guests_can_not_see_create_page()
+    {
+        $this->userSigneIN();
+        $this->get('posts/create')->assertStatus(403);
+        Auth::logout();
+        $this->get('posts/create')->assertStatus(403);
+}
+    /** @test */
+    public function a_post_can_be_created()
     {
         $this->signeIn();
         $this->post('/posts/', Post::factory()->create(['city_id' => ''])->toArray());
         $this->assertCount(1, Post::all());
     }
 
+    /** @test */
+    public function other_users_or_guests_can_not_create_a_post()
+    {
+        $this->post('/posts/', Post::factory()->create(['city_id' => ''])->toArray())->assertStatus(403);
+        $this->userSigneIN();
+        $this->post('/posts/', Post::factory()->create(['city_id' => ''])->toArray())->assertStatus(403);
+    }
     /** @test */
     public function city_is_required()
     {
@@ -38,7 +74,6 @@ class ManagePostTest extends TestCase
         $this->post('/posts/', array_merge($post->toArray(), ['city' => '']))
             ->assertSessionHasErrors('city');
     }
-
     /** @test */
     public function title_is_required()
     {
@@ -47,7 +82,6 @@ class ManagePostTest extends TestCase
         $this->post('/posts/', $post)
             ->assertSessionHasErrors('title');
     }
-
     /** @test */
     public function body_is_required()
     {
@@ -56,20 +90,18 @@ class ManagePostTest extends TestCase
         $this->post('/posts/', $post)
             ->assertSessionHasErrors('body');
     }
-
     /** @test */
     public function food_is_nullable()
     {
         $this->signeIn();
-        $this->post('/posts/', Post::factory()->create()->toArray())
+        $this->post('/posts/',  Post::factory()->create(['food' => ''])->toArray())
             ->assertSessionDoesntHaveErrors('food');
     }
-
     /** @test */
     public function touristAttraction_is_nullable()
     {
         $this->signeIn();
-        $this->post('/posts/', Post::factory()->create()->toArray())
+        $this->post('/posts/',  Post::factory()->create(['touristAttraction' => ''])->toArray())
             ->assertSessionDoesntHaveErrors('touristAttraction');
     }
     /** @test */
@@ -77,18 +109,8 @@ class ManagePostTest extends TestCase
     {
         $this->signeIn();
         $post=Post::factory()->create();
-        $this ->post('/posts/',
-                array_merge($post->toArray(),['city'=>$post->name,'file'=>['ahvaz.jpg']]))
-            ->assertSessionDoesntHaveErrors('file');
-    }
-    /** @test */
-    public function check_to_see_posts()
-    {
-        $this->signeIn();
-        $post=Post::factory()->create();
-        $this->get('/posts')
-            ->assertStatus(200)
-        ->assertSee($post->city->name);
+        $post =array_merge( $post->toArray(),['city'=>$post->city->name]);
+        $this->post('/posts/', $post)->assertSessionHasErrors('file');
     }
     /** @test */
     public function check_uploading_photo_of_a_post()

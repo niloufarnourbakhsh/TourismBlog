@@ -23,7 +23,6 @@ class PostController extends Controller
         $posts=Post::query()->with('City')->paginate(5);
         return view('Admin.index')->with('posts',$posts);
     }
-
     public function create()
     {
         return view('Admin.create');

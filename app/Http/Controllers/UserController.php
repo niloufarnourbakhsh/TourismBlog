@@ -14,7 +14,6 @@ class UserController extends Controller
         return view('admin.users')->with('users', $users);
 
     }
-
     public function delete(User $user)
     {
      $user->delete();
