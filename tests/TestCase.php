@@ -12,10 +12,12 @@ abstract class TestCase extends BaseTestCase
 
     public function signeIn($user=null)
     {
-      return  $this->actingAs($user ?? User::factory(Role::create(['name' => 'Admin']))->create());
+        $this->actingAs($user=$user ?? User::factory(Role::create(['name' => 'Admin']))->create());
+        return $user;
     }
     public function userSigneIN($user=null)
     {
-        return  $this->actingAs($user ?? User::factory(Role::create(['name' => 'User']))->create());
+          $this->actingAs($user=$user ?? User::factory(Role::create(['name' => 'User']))->create());
+          return $user;
     }
 }

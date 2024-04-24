@@ -24,11 +24,9 @@ class PostFactory extends Factory
             'food' => $this->faker->name,
             'category_id'=>1,
             'touristAttraction' => $this->faker->paragraph(1),
-            'user_id' => 1,
+            'user_id' => User::factory()->create()->id,
             'slug'=>$this->faker->slug,
-            'city_id' => function(){
-               return City::factory()->create();
-            },
+            'city_id' => City::factory()->create(),
         ];
     }
 }
