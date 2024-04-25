@@ -29,7 +29,7 @@
                         @if($errors->first('city'))
                             <p class="fw-bolder">{{$errors->first('city')}}</p>
                         @endif
-                        <input type="hidden" value="{{$post->city->id}}" name="cityId">
+                        <input type="hidden" value="{{$post->city->id}}" name="city_id">
                     </div>
                     <div class="form-group">
                         <label for="category_id"> دسته بندی</label>

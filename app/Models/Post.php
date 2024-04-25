@@ -16,6 +16,7 @@ class Post extends Model
     use Sluggable;
     protected $guarded;
     protected $with=['photos'];
+    protected $casts=['is_active'=>'boolean'];
     public function sluggable(): array
     {
         return [

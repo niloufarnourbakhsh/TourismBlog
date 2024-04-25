@@ -24,7 +24,6 @@ class UserTest extends TestCase
         $user=User::factory(Role::create(['name'=>'User']))->create();
         $this->assertFalse($user->IsAdmin());
     }
-
     /** @test */
     public function a_user_can_have_many_project()
     {

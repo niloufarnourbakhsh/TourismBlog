@@ -146,18 +146,47 @@ class ManagePostTest extends TestCase
         $this->assertNotNull($photo->path);
         Storage::disk('public')->assertExists('images/', $file->name);
     }
+    /** @test */
+    public function admin_can_update_the_post()
+    {
+        $this->signeIn();
+        $this->post('/posts/',($post=Post::factory()->create())->toArray());
+        $this->patch($post->path(), $attributes=[
+            'title' => 'Tehran',
+            'city_id' => 1,
+            'body' => 'this body is for editing the post',
+            'food' => null,
+            'touristAttraction' => 'borje_milad',
+            'category_id' => 1,
+            'is_active' => 1
+        ]);
+        $this->assertDatabaseHas(Post::class,$attributes);
+    }
+    /** @test */
+    public function an_authenticated_user_or_other_users_can_not_update_a_post()
+    {
+        $this->post('/posts/',($post=Post::factory()->create())->toArray());
+        $this->patch($post->path(), $attributes=[
+            'title' => 'Tehran',
+            'city_id' => 1,
+            'body' => 'this body is for editing the post',
+            'food' => null,
+            'touristAttraction' => 'borje_milad',
+            'category_id' => 1,
+            'is_active' => 1
+        ])->assertStatus(403);
+}
 
     /** @test */
-    public function deleted_a_photo()
+    public function check_if_the_photo_that_uploaded_can_be_removed()
     {
         $this->signeIn();
         Storage::fake('public');
         $file = UploadedFile::fake()->image('ahvaz.jpg');
-        $this->post('/posts', array_merge(Post::factory()->create()->toArray(),[
+        $this->post('/posts', array_merge(($post=Post::factory()->create())->toArray(),[
             'file'=>[$file->name],
             'city'=>$this->faker->city
         ]));
-        $post = Post::first();
         $photo = Photo::first();
         $this->assertNotNull($photo->path);
         Storage::disk('public')->assertExists('images/', $file->name);
@@ -165,17 +194,27 @@ class ManagePostTest extends TestCase
         Storage::disk('public')->assertMissing('ahvaz.jpg');
     }
     /** @test */
-    public function delete_a_post()
+    public function admin_can_delete_a_post()
     {
         $post = Post::factory()->create();
         $this->assertCount(1, Post::all());
+        $this->assertCount(1, City::all());
         Event::fake();
         Event::assertNotDispatched(DeletePhoto::class);
         $this->signeIn();
         $this->delete('/posts/' . $post->id);
         Event::dispatch(DeletePhoto::class);
         Event::assertDispatched(DeletePhoto::class);
-        $this->assertCount(0, Post::all());
+        $this->assertDatabaseMissing(Post::class,$post->toArray());
+        $this->assertCount(0, City::all());
+    }
+    /** @test */
+    public function an_authenticated_user_or_other_users_can_not_delete_a_post()
+    {
+        $post = Post::factory()->create();
+        $this->delete('/posts/' . $post->id)->assertStatus(403);
+        $this->userSigneIN();
+        $this->delete('/posts/' . $post->id)->assertStatus(403);
     }
 
     /** @test */
@@ -194,32 +233,13 @@ class ManagePostTest extends TestCase
         $this->post('/posts/', Post::factory()->create()->toArray());
         $post = Post::first();
         $this->patch('/posts/active/' . $post->id, [
-            'is_active' => '0'
+            'is_active' => false
         ]);
-        $this->assertEquals(0, Post::first()->is_active);
+        $this->assertFalse( Post::first()->is_active);
+        $this->patch('/posts/active/' . $post->id, [
+            'is_active' => true
+        ]);
+        $this->assertTrue( Post::first()->is_active);
     }
 
-    /** @test */
-    public function a_post_can_be_updated()
-    {
-        $this->signeIn();
-        $post = Post::factory()->create();
-        $this->post('/posts/', Post::factory()->create()->toArray());
-        $this->patch($post->path(), [
-            'title' => 'Tehran',
-            'city' => 'Tehran',
-            'cityId' => 1,
-            'body' => 'this body is for editing the post',
-            'food' => '',
-            'file' => ['tehran.jpg'],
-            'touristAttraction' => 'borje_milad',
-            'category_id' => 1,
-            'is_active' => 1
-        ]);
-        $this->assertEquals('Tehran', Post::first()->title);
-        $this->assertEquals('Tehran', Post::first()->city->name);
-        $this->assertEquals('this body is for editing the post', Post::first()->body);
-        $this->assertEquals('', Post::first()->food);
-        $this->assertEquals('borje_milad', Post::first()->touristAttraction);
-    }
 }

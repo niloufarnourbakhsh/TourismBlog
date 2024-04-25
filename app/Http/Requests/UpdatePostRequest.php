@@ -27,8 +27,8 @@ class UpdatePostRequest extends FormRequest
         return [
             'title'=>'required',
             'body'=>'required',
-            'city'=>'required',
-            'cityId'=>'required',
+            'city'=>'sometimes',
+            'city_id'=>'required',
             'category_id'=>'required',
             'food'=>'sometimes',
             'touristAttraction'=>'sometimes',
@@ -38,11 +38,13 @@ class UpdatePostRequest extends FormRequest
 
     public function updateCity()
     {
-        return City::whereId($this->cityId)->update(['name'=>$this->city]);
+        return City::whereId($this->city_id)->update(['name'=>$this->city]);
     }
     public function save()
     {
-        $this->updateCity();
-        return tap($this->route('post')->update($this->except(['city','cityId','file'])));
+        if ($this->city){
+            $this->updateCity();
+        }
+        return tap($this->route('post')->update($this->except(['city','city_id','file'])));
     }
 }
