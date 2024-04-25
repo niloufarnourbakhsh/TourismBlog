@@ -11,24 +11,21 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class InserPhoto
+class InsertPhoto
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public $images;
-    public function __construct(public Post $post,$images)
+    public function __construct(public Post $post, $images)
     {
         $this->images = $images;
     }
-
     public function getImages()
     {
         return $this->images;
     }
-
     public function getPostId()
     {
         return $this->post->id;

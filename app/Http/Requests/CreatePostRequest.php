@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Events\InserPhoto;
 use App\Models\City;
 use App\Models\Post;
 use Illuminate\Foundation\Http\FormRequest;
@@ -26,21 +27,21 @@ class CreatePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'=>'required',
-            'body'=>'required',
-            'city'=>'required',
-            'file'=>'required',
-            'category_id'=>'required',
-            'food'=>'sometimes',
-            'touristAttraction'=>'sometimes',
+            'title' => 'required',
+            'body' => 'required',
+            'city' => 'required',
+            'file' => 'required',
+            'category_id' => 'required',
+            'food' => 'sometimes',
+            'touristAttraction' => 'sometimes',
         ];
     }
-    public function createPost()
+
+    public function save()
     {
-        $data=array_merge($this->only('title','body','food','touristAttraction','category_id'),[
-            'city_id'=>City::create(['name'=>$this->city])->id,
-            'user_id'=>auth()->id()
+        $data = array_merge($this->only('title', 'body', 'food', 'touristAttraction', 'category_id'), [
+            'city_id' => City::create(['name' => $this->city])->id,
         ]);
-      return  Post::create($data);
+        return auth()->user()->posts()->create($data);
     }
 }
