@@ -3,12 +3,11 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\LikeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\PostLikeController;
 use App\Http\Controllers\UserController;
-use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,7 +37,7 @@ Route::middleware('can:is_admin')->group(function (){
 });
 
 Route::middleware('auth')->group(function (){
-    Route::post('/posts/like/{post}', [LikeController::class, 'store'])->name('like.post');
+    Route::post('/posts/like/{post}', [PostLikeController::class, 'store'])->name('like.post');
     Route::post('/comment/{post}',[CommentController::class,'store'])->name('comment.store');
     Route::delete('/comment/{comment}',[CommentController::class,'delete'])->name('comment.delete');
     Route::post('/comment/like/{comment}',[CommentController::class,'LikeComment'])->name('like.comment');

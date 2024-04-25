@@ -7,7 +7,7 @@ use App\Notifications\PostLikeNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 
-class LikeController extends Controller
+class PostLikeController extends Controller
 {
     public function store(Post $post)
     {
