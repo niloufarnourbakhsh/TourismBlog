@@ -67,22 +67,20 @@ class ManagePostTest extends TestCase
     {
         $this->post('/posts/', Post::factory()->create()->toArray())->assertStatus(403);
         $this->userSigneIN();
-        $this->post('/posts/', Post::factory()->create(['city_id' => ''])->toArray())->assertStatus(403);
+        $this->post('/posts/', Post::factory()->create()->toArray())->assertStatus(403);
     }
     /** @test */
     public function a_post_requires_a_city()
     {
         $this->signeIn();
-        $post = Post::factory()->create();
-        $this->post('/posts/', array_merge($post->toArray(), ['city' => '']))
+        $this->post('/posts/', array_merge( Post::factory()->create()->toArray(), ['city' => '']))
             ->assertSessionHasErrors('city');
     }
     /** @test */
     public function a_post_requires_a_title()
     {
         $this->signeIn();
-        $post = Post::factory()->create(['title' => ''])->toArray();
-        $this->post('/posts/', $post)
+        $this->post('/posts/', Post::factory()->create(['title' => ''])->toArray())
             ->assertSessionHasErrors('title');
     }
 
@@ -90,8 +88,7 @@ class ManagePostTest extends TestCase
     public function a_post_requires_a_body()
     {
         $this->signeIn();
-        $post = Post::factory()->create(['body' => ''])->toArray();
-        $this->post('/posts/', $post)
+        $this->post('/posts/', Post::factory()->create(['body' => ''])->toArray())
             ->assertSessionHasErrors('body');
     }
 
@@ -102,7 +99,6 @@ class ManagePostTest extends TestCase
         $this->post('/posts/', Post::factory()->create(['food' => ''])->toArray())
             ->assertSessionDoesntHaveErrors('food');
     }
-
     /** @test */
     public function touristAttraction_is_nullable_in_the_post()
     {
@@ -115,8 +111,7 @@ class ManagePostTest extends TestCase
     public function a_post_must_have_at_least_one_photo()
     {
         $this->signeIn();
-        $post = Post::factory()->create();
-        $post = array_merge($post->toArray(), ['city' => $post->city->name]);
+        $post = array_merge(($post= Post::factory()->create())->toArray(), ['city' => $post->city->name]);
         $this->post('/posts/', $post)->assertSessionHasErrors('file');
     }
     /** @test */
@@ -218,10 +213,10 @@ class ManagePostTest extends TestCase
     }
 
     /** @test */
-    public function show_one_post()
+    public function show_a_post_to_everyone()
     {
-        $post = Post::factory(City::create(['name' => 'ahvaz']))->create();
-        Photo::create(['path' => 'ax.jpg', 'post_id' => $post->id]);
+        $post = Post::factory(City::factory())->create();
+        Photo::create(['path' => 'axe.jpg', 'post_id' => $post->id]);
         $this->get('/posts/' . $post->slug)->assertStatus(200)
             ->assertSee($post->body)
             ->assertSee($post->city->name);
@@ -230,8 +225,7 @@ class ManagePostTest extends TestCase
     public function activity_of_the_post_can_change()
     {
         $this->signeIn();
-        $this->post('/posts/', Post::factory()->create()->toArray());
-        $post = Post::first();
+        $this->post('/posts/', ($post=Post::factory()->create())->toArray());
         $this->patch('/posts/active/' . $post->id, [
             'is_active' => false
         ]);

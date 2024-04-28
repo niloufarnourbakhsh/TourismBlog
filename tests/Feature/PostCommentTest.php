@@ -14,7 +14,7 @@ class PostCommentTest extends TestCase
 {
     use RefreshDatabase;
     /** @test */
-    public function a_user_can_create_a_comment()
+    public function a_user_can_leave_a_comment()
     {
         $this->userSigneIN();
         $post=Post::factory()->create();
@@ -44,20 +44,17 @@ class PostCommentTest extends TestCase
         ]);
         $response->assertSessionHasErrors('body');
     }
-
     /** @test */
     public function a_user_can_delete_their_comments()
     {
         $this->userSigneIN();
         $post=Post::factory()->create();
-        $this->post('/comment/'.$post->id,[
+        $this->post('/comment/'.$post->id,$comment=[
             'body'=>'a comment'
         ]);
-        $this->assertCount(1,Comment::all());
-        $comment=Comment::first();
-        $this->delete('/comment/'.$comment->id);
-        $this->assertCount(0,Comment::all());
+        $this->assertDatabaseHas(Comment::class,$comment);
+        $this->delete('/comment/'.Comment::first()->id);
+        $this->assertDatabaseMissing(Comment::class,$comment);
     }
-
 
 }
