@@ -73,6 +73,7 @@ class Post extends Model
     {
         $like=$this->likes()->create(['user_id'=>Auth::id()]);
         Notification::send($this->user,new PostLikeNotification(\auth()->user(),$like,$this));
+        return $like;
     }
 
     public function takeLikeBack($like)

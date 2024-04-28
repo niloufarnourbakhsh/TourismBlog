@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use App\Models\City;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,7 +23,7 @@ class PostFactory extends Factory
             'title'=>$this->faker->name,
             'body' => $this->faker->paragraph(5),
             'food' => $this->faker->name,
-            'category_id'=>1,
+            'category_id'=>Category::factory()->create(),
             'touristAttraction' => $this->faker->paragraph(1),
             'user_id' => User::factory()->create()->id,
             'slug'=>$this->faker->slug,

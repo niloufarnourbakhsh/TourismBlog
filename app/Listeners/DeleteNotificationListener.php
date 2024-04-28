@@ -25,7 +25,6 @@ class DeleteNotificationListener
         $post=$event->getPost();
         $like=$event->getLike();
         foreach ($post->user->notifications as $notification){
-
             $notification->where('data','like',"%$like->id%")->delete();
         }
     }
