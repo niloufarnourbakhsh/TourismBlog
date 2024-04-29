@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class CommentCreateRequest extends FormRequest
 {
@@ -24,5 +25,14 @@ class CommentCreateRequest extends FormRequest
         return [
             'body'=>'required'
         ];
+    }
+
+    public function saveComment()
+    {
+        $post=$this->route('post');
+        Auth::user()->comments()->create([
+            'body' => $this->body,
+            'post_id' => $post->id
+        ]);
     }
 }

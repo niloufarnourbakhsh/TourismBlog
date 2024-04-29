@@ -5,7 +5,6 @@ namespace Tests\Unit;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Collection;
 use Tests\TestCase;
 class CategoryTest extends TestCase
 {

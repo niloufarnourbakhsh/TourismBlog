@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class PostCommentTest extends TestCase
@@ -19,17 +20,16 @@ class PostCommentTest extends TestCase
         $this->userSigneIN();
         $post=Post::factory()->create();
         $this->post('/comment/'.$post->id,[
-            'body'=>'hiiiiiiiiiii'
+            'body'=>'new Comment'
         ]);
         $this->assertCount(1,Comment::all());
-
     }
     /** @test */
     public function just_un_authorized_user_can_leave_a_comment()
     {
         $post=Post::factory()->create();
         $this->post('/comment/'.$post->id,[
-            'body'=>'hiiiiiiiiiii'
+            'body'=>'new Comment'
         ])->assertRedirect('login');
         $this->assertCount(0,Comment::all());
     }
@@ -45,6 +45,18 @@ class PostCommentTest extends TestCase
         $response->assertSessionHasErrors('body');
     }
     /** @test */
+    public function admin_can_delete_other_users_comment()
+    {
+        $this->userSigneIN();
+        $post=Post::factory()->create();
+        auth()->user()->comments()->create(['body'=>'new Comment','post_id'=>$post->id]);
+        $this->assertCount(1,Comment::all());
+        Auth::logout();;
+        $this->signeIn();
+        $this->delete('/comment/'.Comment::first()->id);
+        $this->assertCount(0,Comment::all());
+    }
+    /** @test */
     public function a_user_can_delete_their_comments()
     {
         $this->userSigneIN();
@@ -56,5 +68,4 @@ class PostCommentTest extends TestCase
         $this->delete('/comment/'.Comment::first()->id);
         $this->assertDatabaseMissing(Comment::class,$comment);
     }
-
 }

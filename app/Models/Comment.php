@@ -29,12 +29,12 @@ class Comment extends Model
 
     public function AddLike()
     {
-        if ($this->likes()->count() === 0) {
-            return $this->likes()->create(['user_id' => Auth::id()]);
-        } else {
-            return $this->likes()->where(['user_id' => Auth::id()])->first() ?
-                $this->likes()->where(['user_id' => Auth::id()])->delete() :
-                $this->likes()->create(['user_id' => Auth::id()]);
-        }
+        return $this->likes()->create(['user_id' => Auth::id()]);
     }
+
+    public function DeleteLike()
+    {
+        return $this->likes()->where(['user_id' => Auth::id()])->delete();
+    }
+
 }
