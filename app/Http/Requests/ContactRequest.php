@@ -24,7 +24,7 @@ class ContactRequest extends FormRequest
         return [
             'name'=>'required',
             'email'=>'required',
-            'body'=>'required',
+            'message'=>'required',
         ];
     }
 }

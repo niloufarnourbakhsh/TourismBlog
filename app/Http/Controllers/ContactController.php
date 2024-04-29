@@ -17,10 +17,9 @@ class ContactController extends Controller
 
     public function submit(ContactRequest $request)
     {
-
         Mail::to(env('MAIL_FROM_ADDRESS'))
-        ->send(new ContactUsMail($request->name,$request->email,$request->body));
+        ->send(new ContactUsMail($request->name,$request->email,$request->message));
         Session::flash('contact-us','پیام شما ارسال شد');
-        return redirect()->back();
+        return redirect()->to('/contact.us');
     }
 }

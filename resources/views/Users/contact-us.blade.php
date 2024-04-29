@@ -21,7 +21,7 @@
                         <label>ایمیل:</label>
                         <input type="email" class="form-control my-3" name="email">
                         <label>متن پیام:</label>
-                        <textarea class="form-control my-3" name="body"></textarea>
+                        <textarea class="form-control my-3" name="message"></textarea>
                         <div class="d-grid gap-2 mt-5">
                             <button class="btn bg-dark-red text-white">ارسال پیام</button>
                         </div>

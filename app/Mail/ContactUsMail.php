@@ -16,7 +16,7 @@ class ContactUsMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public string $name,public string $email,public string $body)
+    public function __construct(public string $name,public string $email,public string $message)
     {
         //
     }
@@ -42,7 +42,7 @@ class ContactUsMail extends Mailable
             with: [
                 'name'=>$this->name,
                 'email'=>$this->email,
-                'body'=>$this->body
+                'body'=>$this->message
             ]
         );
     }

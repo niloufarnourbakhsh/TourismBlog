@@ -45,14 +45,7 @@ Route::middleware('auth')->group(function (){
 Route::get('/contact-us',[ContactController::class,'create'])->name('contact.us');
 Route::post('/contact-us',[ContactController::class,'submit'])->name('contact.us.submit');
 Route::view('/about-us','Users.about-us')->name('about.us');
-
 Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
-
-
-
-
-
 Route::get('/gallery',[PostController::class,'all'])->name('gallery');
 Auth::routes();
-
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
