@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 
-use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 class PostTest extends TestCase
@@ -28,6 +27,4 @@ class PostTest extends TestCase
         $post=Post::factory()->create();
         $this->assertInstanceOf(User::class,$post->user);
     }
-
-
 }

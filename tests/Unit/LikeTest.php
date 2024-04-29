@@ -2,15 +2,41 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use App\Models\Like;
+use App\Models\Post;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class LikeTest extends TestCase
 {
-    /**
-     * A basic unit test example.
-     */
-    public function test_example(): void
+    use RefreshDatabase;
+    /** @test */
+    public function users_can_like_a_post()
     {
-        $this->assertTrue(true);
+        $this->userSigneIN();
+        $post = Post::factory()->create();
+        $post->likePost();
+        $this->assertCount(1,Like::all());
+    }
+    /** @test */
+    public function users_can_take_the_like_back()
+    {
+        $this->userSigneIN();
+        $post = Post::factory()->create();
+        $like=$post->likePost();
+        $this->assertCount(1,Like::all());
+        $post->takeLikeBack($like);
+        $this->assertCount(0,Like::all());
+    }
+    /** @test */
+    public function a_user_want_to_see_if_they_has_liked_a_post()
+    {
+        $this->userSigneIN();
+        $post = Post::factory()->create();
+        $like=$post->likePost();
+        $this->assertCount(1,Like::all());
+        $this->assertTrue($post->showLikesInPost());
+        $post->takeLikeBack($like);
+        $this->assertFalse($post->showLikesInPost());
     }
 }
