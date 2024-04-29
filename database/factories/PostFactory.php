@@ -28,6 +28,7 @@ class PostFactory extends Factory
             'user_id' => User::factory()->create()->id,
             'slug'=>$this->faker->slug,
             'city_id' => City::factory()->create(),
+            'is_active'=>true,
         ];
     }
 }

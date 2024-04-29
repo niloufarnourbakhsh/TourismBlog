@@ -12,8 +12,7 @@ class PostLikeController extends Controller
     public function store(Post $post)
     {
         if ($post->likes()->count() === 0) {
-            $like = $post->likes()->create(['user_id' => Auth::id()]);
-            Notification::send($post->user, new PostLikeNotification(\auth()->user(), $like, $post));
+            $post->likePost();
         } else {
             $like = $post->likes()->where(['user_id' => Auth::id()])->first();
             $like ? $post->takeLikeBack($like) : $post->likePost();
