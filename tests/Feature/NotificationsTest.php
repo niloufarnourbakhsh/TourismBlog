@@ -33,8 +33,7 @@ class NotificationsTest extends TestCase
         Auth::logout();
         $admin=$this->signeIn();
         $admin->notify(new CommentNotification($user,$comment));
-        $notifications =$admin->notifications;
-        $notification=$notifications->first();
+        $notification =$admin->notifications->first();
         $this->get('/notification/markNotification/'.$notification->id);
         $this->assertNotNull($notification->fresh()->read_at);
 }
