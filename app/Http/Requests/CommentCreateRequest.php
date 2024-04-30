@@ -30,7 +30,7 @@ class CommentCreateRequest extends FormRequest
     public function saveComment()
     {
         $post=$this->route('post');
-        Auth::user()->comments()->create([
+       return Auth::user()->comments()->create([
             'body' => $this->body,
             'post_id' => $post->id
         ]);

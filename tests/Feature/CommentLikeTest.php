@@ -6,15 +6,15 @@ use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CommentLikeTest extends TestCase
 {
     use RefreshDatabase;
     /** @test */
-    public function like_a_comment()
+    public function users_can_like_others_comment()
     {
+
         $post=Post::factory()->create();
         $this->assertCount(1,Post::all());
         $this->signeIn();
@@ -28,7 +28,7 @@ class CommentLikeTest extends TestCase
 
     }
     /** @test */
-    public function unlike_a_comment()
+    public function users_can_take_their_likes_of_other_users_comments_back()
     {
         $post=Post::factory()->create();
         $this->assertCount(1,Post::all());

@@ -1,0 +1,42 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\Post;
+use App\Notifications\CommentNotification;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Support\Facades\Notification;
+use Tests\TestCase;
+
+class NotificationsTest extends TestCase
+{
+    use RefreshDatabase;
+
+    /** @test */
+    public function admin_can_see_all_the_notifications()
+    {
+        $post=Post::factory()->create(['user_id'=>$this->userSigneIN()->id]);
+        $comment=$post->user->comments()->create(['body'=>'hii','post_id'=>$post->id]);
+        Auth::logout();
+        $notification=new CommentNotification($post->user,$comment);
+        $this->signeIn()->notify($notification);
+        $this->get('notifications')->assertStatus(200)
+        ->assertSeeText($post->user->name);
+    }
+    /** @test */
+    public function admin_can_mark_a_notifications_as_read()
+    {
+        $post=Post::factory()->create(['user_id'=>$this->userSigneIN()->id]);
+        $comment=$post->user->comments()->create(['body'=>'hii','post_id'=>$post->id]);
+        Auth::logout();
+        $admin=$this->signeIn();
+        $admin->notify(new CommentNotification($post->user,$comment));
+        $notifications =$admin->notifications;
+        $notification=$notifications->first();
+        $this->get('/notification/markNotification/'.$notification->id);
+        $this->assertNotNull($notification->fresh()->read_at);
+}
+
+}

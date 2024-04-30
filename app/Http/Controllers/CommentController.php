@@ -14,8 +14,8 @@ class CommentController extends Controller
 {
     public function store(CommentCreateRequest $request, Post $post)
     {
-        $request->saveComment();
-        Notification::send($post->user, new CommentNotification(Auth::user()));
+        $comment=$request->saveComment();
+        Notification::send($post->user, new CommentNotification(Auth::user(),$comment));
         return redirect()->back();
     }
 
@@ -28,11 +28,11 @@ class CommentController extends Controller
 
     public function LikeComment(Comment $comment)
     {
-        if ($this->likes()->count() === 0) {
+        if ($comment->likes()->count() === 0) {
             $comment->AddLike();
         } else {
-            $comment = $comment->likes()->where(['user_id' => Auth::id()])->first();
-            $comment ? $comment->addlike() : $comment->DeleteLike();
+            $like = $comment->likes()->where(['user_id' => Auth::id()])->first();
+            $like ? $comment->DeleteLike() : $comment->AddLike() ;
         }
         return redirect()->back();
     }
