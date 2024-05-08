@@ -59,7 +59,7 @@ class CategoryTest extends TestCase
         ]);
     }
     /** @test */
-    public function admin_can_delete_a_collection()
+    public function admin_can_delete_a_category()
     {
         $this->signeIn();
         $this->post('/categories',[
