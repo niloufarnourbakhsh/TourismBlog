@@ -46,7 +46,6 @@ body {
 
 label {
     font-weight: bold;
-
 }
 
 /*utility classes*/
@@ -73,7 +72,7 @@ label {
 #showcase {
     width: 100vw;
     height: 100vh;
-    background: url("../images/hafeztombshiraz.jpg") no-repeat fixed center center/cover
+    background: url("../images/hafeztombshiraz.jpg") no-repeat fixed center center/cover;
 }
 
 #showcase .cover {
