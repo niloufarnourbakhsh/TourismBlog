@@ -38,7 +38,7 @@
                 <div class="bg-light-green d-flex flex-row p-2">
                     <div class="mx-4 pt-2"><i class="fa-solid fa-ellipsis fa-2x px-2"></i></div>
                     <div class="pt-2"><i class="fa-regular fa-eye fa-2x"></i></div>
-                    <div class="pt-2 ml-3"><p class="mx-2">{{$post->view}}</div>
+{{--                    <div class="pt-2 ml-3"><p class="mx-2">{{$post->view}}</div>--}}
 
                     <div>
                         @if(\Illuminate\Support\Facades\Auth::check())

@@ -24,7 +24,6 @@ return new class extends Migration
             $table->text('body');
             $table->string('food')->nullable();
             $table->string('touristAttraction')->nullable();
-            $table->unsignedBigInteger('view')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
