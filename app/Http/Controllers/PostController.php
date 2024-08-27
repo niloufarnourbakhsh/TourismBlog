@@ -8,6 +8,7 @@ use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
 
 class PostController extends Controller
@@ -50,23 +51,24 @@ class PostController extends Controller
     public function all()
     {
         if (\request()->category) {
-            $posts = Post::query()->with(['category'])
+            $posts = Post::query()
                 ->where(['is_active' => 1])
                 ->whereHas('category', function ($query) {
                     $query->where('name', request()->category);
-                })->paginate(4);
+                })->with(['photos','city'])->paginate(4);
         } else {
-            $posts = Post::query()->where(['is_active' => 1])->with('photos')->paginate(4);
+            $posts = Post::query()->where(['is_active' => 1])->with(['photos','city'])->paginate(4);
         }
         return view('Users.gallery')->with('posts', $posts);
     }
 
     public function show(Post $post)
     {
-        $post->increment('view');
+        Redis::incr('view.'.$post->id);
+        $view=Redis::get('view.'.$post->id);
         $post->with(['city', 'photos', 'likes', 'comments']);
         $is_liked = $post->showLikesInPost();
-        return view('Users.show-posts')->with('post', $post)->with('is_liked', $is_liked);
+        return view('Users.show-posts')->with('post', $post)->with('is_liked', $is_liked)->with('view',$view);
     }
 
     public function destroy(Post $post)
