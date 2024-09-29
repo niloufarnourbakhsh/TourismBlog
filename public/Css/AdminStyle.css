@@ -19,7 +19,11 @@ body#admin{
 
 #admin-nav ul li:not(:last-child){
     border-bottom: 2px solid var(--border-color);
-    transition: all 0.7s;
+    transition: all 0.7s !important;
+}
+#admin-nav ul li:last-child{
+    border-bottom: none !important;
+    transition: all 0.7s !important;
 }
 #admin-nav-2{ font-size: 18px}
 #admin-nav ul li a:hover{

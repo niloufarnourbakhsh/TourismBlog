@@ -36,15 +36,5 @@ class UpdatePostRequest extends FormRequest
         ];
     }
 
-    public function updateCity()
-    {
-        return City::whereId($this->city_id)->update(['name'=>$this->city]);
-    }
-    public function save()
-    {
-        if ($this->city){
-            $this->updateCity();
-        }
-        return tap($this->route('post')->update($this->except(['city','city_id','file'])));
-    }
+
 }

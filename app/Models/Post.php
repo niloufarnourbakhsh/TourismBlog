@@ -83,4 +83,9 @@ class Post extends Model
         $this->likes()->where(['user_id'=>Auth::id()])->delete();
     }
 
+    public function updateCity($city)
+    {
+        return City::whereId($this->city_id)->update(['name'=>$city]);
+    }
+
 }

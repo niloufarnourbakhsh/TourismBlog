@@ -39,7 +39,7 @@
                         <td>{{$post->city->name}}</td>
                         <td>{{\Illuminate\Support\Str::limit($post->body,115)}}</td>
                         <td>
-                            @if($post->is_active===1)
+                            @if($post->is_active===true)
                                 <form action="{{route('posts.active',[$post->id])}}" method="post">
                                     @csrf
                                     @method('PATCH')
@@ -76,10 +76,8 @@
             </table>
         </div>
 
-        <div class="number-part text-center my-1">
-            <p>
-                {{$posts->links()}}
-            </p>
+        <div class="number-part text-center my-1 bg-danger py-4">
+            {{$posts->links()}}
         </div>
     </div>
 @endsection

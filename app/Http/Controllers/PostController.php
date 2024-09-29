@@ -6,6 +6,7 @@ use App\Events\DeletePhoto;
 use App\Events\InsertPhoto;
 use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Models\City;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
@@ -15,7 +16,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::query()->with('City')->paginate(5);
+        $posts = Post::query()->with('City')->paginate(4);
         return view('Admin.index')->with('posts', $posts);
     }
 
@@ -26,7 +27,10 @@ class PostController extends Controller
 
     public function store(CreatePostRequest $request)
     {
-        $post = $request->save();
+        $data = array_merge($request->only('title', 'body', 'food', 'touristAttraction', 'category_id'), [
+            'city_id' => City::create(['name' => $request->city])->id,
+        ]);
+        $post=auth()->user()->posts()->create($data);
         $images = $request->file;
         event(new InsertPhoto($post, $images));
         return redirect()->back();
@@ -40,7 +44,10 @@ class PostController extends Controller
 
     public function update(UpdatePostRequest $request, Post $post)
     {
-        $request->save();
+        if ($request->city){
+            $post->updateCity($request->city);
+        }
+        tap($post->update($request->except(['city','city_id','file'])));
         if ($images = $request->file) {
             event(new InsertPhoto($post, $images));
         }
@@ -48,19 +55,6 @@ class PostController extends Controller
         return redirect()->back();
     }
 
-    public function all()
-    {
-        if (\request()->category) {
-            $posts = Post::query()
-                ->where(['is_active' => 1])
-                ->whereHas('category', function ($query) {
-                    $query->where('name', request()->category);
-                })->with(['photos','city'])->paginate(4);
-        } else {
-            $posts = Post::query()->where(['is_active' => 1])->with(['photos','city'])->paginate(4);
-        }
-        return view('Users.gallery')->with('posts', $posts);
-    }
 
     public function show(Post $post)
     {

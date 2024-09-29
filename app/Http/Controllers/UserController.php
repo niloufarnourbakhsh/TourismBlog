@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -10,7 +11,9 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::query()->where(['role_id' => 2])->paginate(5);
+        $users=User::query()->whereHas('role',function ($query){
+            $query->where(['name'=>Role::Role_User]);
+        })->paginate(5);
         return view('admin.users')->with('users', $users);
 
     }

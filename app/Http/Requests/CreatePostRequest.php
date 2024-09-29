@@ -37,11 +37,4 @@ class CreatePostRequest extends FormRequest
         ];
     }
 
-    public function save()
-    {
-        $data = array_merge($this->only('title', 'body', 'food', 'touristAttraction', 'category_id'), [
-            'city_id' => City::create(['name' => $this->city])->id,
-        ]);
-        return auth()->user()->posts()->create($data);
-    }
 }

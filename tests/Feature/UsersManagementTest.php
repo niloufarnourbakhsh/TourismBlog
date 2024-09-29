@@ -16,7 +16,7 @@ class UsersManagementTest extends TestCase
     public function admin_can_see_user_information_in_users_view()
     {
         $this->signeIn();
-        $user = User::factory()->create(['role_id'=>2]);
+        $user = User::factory()->create();
         $this->get('/users')
             ->assertSee($user->id)
             ->assertSee($user->name)

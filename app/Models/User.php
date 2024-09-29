@@ -48,6 +48,7 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
@@ -58,8 +59,8 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
-    public function IsAdmin() :bool
+    public function IsAdmin(): bool
     {
-      return $this->role->name === Role::Role_Admin;
+        return $this->role->name === Role::Role_Admin;
     }
 }
