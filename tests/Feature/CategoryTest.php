@@ -59,6 +59,18 @@ class CategoryTest extends TestCase
         ]);
     }
     /** @test */
+    public function other_users_or_unauthenticated_Users_can_not_update_a_category()
+    {
+        $category=Category::factory()->create();
+        $this->patch('/categories/'.$category->id,[
+            'name'=>'nature-2'
+        ])->assertStatus(403);
+        $this->userSigneIN();
+        $this->patch('/categories/'.$category->id,[
+            'name'=>'nature-2'
+        ])->assertStatus(403);
+    }
+    /** @test */
     public function admin_can_delete_a_category()
     {
         $this->signeIn();
@@ -66,8 +78,7 @@ class CategoryTest extends TestCase
             'name'=>'nature'
         ]);
         $this->assertCount(1,Category::all());
-        $category=Category::first();
-        $this->delete('/categories/'.$category->id);
+        $this->delete('/categories/'.Category::first()->id);
         $this->assertCount(0,Category::all());
     }
     /** @test */

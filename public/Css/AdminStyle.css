@@ -37,10 +37,14 @@ body#admin{
     height: 2px;
 }
 .table-style{ height: 55vh}
-.number-part{ height: 4vh}
+.number-part{ height: 10vh}
 #admin-content{ min-height: 90vh}
 .text-edition{ color: var(--edit)}
 .text-delete{ color: var(--delete)}
 .text-show{ color: var(--show)}
 .bg-purple{ background-color: var(--purple) !important;}
 .bg-delete{ background-color: var(--delete-2) !important;}
+
+/*#body-style{*/
+/*    background: ;*/
+/*}*/

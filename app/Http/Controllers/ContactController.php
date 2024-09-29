@@ -15,11 +15,11 @@ class ContactController extends Controller
         return view('Users.contact-us');
     }
 
-    public function submit(ContactRequest $request)
+    public function store(ContactRequest $request)
     {
         Mail::to(env('MAIL_FROM_ADDRESS'))
         ->send(new ContactUsMail($request->name,$request->email,$request->message));
         Session::flash('contact-us','پیام شما ارسال شد');
-        return redirect()->to('/contact.us');
+        return redirect()->route('contact.us');
     }
 }

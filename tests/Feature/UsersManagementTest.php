@@ -28,8 +28,14 @@ class UsersManagementTest extends TestCase
     {
         $user = User::factory()->create(['role_id'=>2]);
         $this->signeIn();
-        $this->assertCount(2,User::all());
+        $this->assertDatabaseHas(User::class,[
+            'name'=>$user->name,
+            'email'=>$user->email
+        ]);
         $this->delete('/user/'.$user->id);
-        $this->assertCount(1,User::all());
+        $this->assertDatabaseMissing(User::class,[
+            'name'=>$user->name,
+            'email'=>$user->email
+        ]);
     }
 }

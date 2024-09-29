@@ -64,7 +64,7 @@ class PostCommentTest extends TestCase
         $post=Post::factory()->create();
         auth()->user()->comments()->create($comment=['body'=>'new Comment','post_id'=>$post->id]);
         $this->assertDatabaseHas(Comment::class,$comment);
-        Auth::logout();;
+        Auth::logout();
         $this->signeIn();
         $this->delete('/comment/'.Comment::first()->id);
         $this->assertDatabaseMissing(Comment::class,$comment);

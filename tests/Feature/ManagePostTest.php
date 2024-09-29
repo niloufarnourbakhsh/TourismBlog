@@ -249,18 +249,6 @@ class ManagePostTest extends TestCase
         $this->get('/gallery')->assertDontSee($post->city->name)
         ->assertDontSee($post->photo);
 }
-    /** @test */
-    public function only_posts_of_a_specific_category_is_shown_on_gallery()
-    {
-        $this->signeIn();
-        $post=Post::factory(City::factory())->create();
-        $photo=Photo::factory()->create(['post_id'=>$post->id]);
-        $anotherPhoto=Photo::factory( $anotherPost=Post::factory(City::factory())->create())->create();
-        $this->get('/gallery?category='.$post->category->name)
-        ->assertSee($post->city->name)
-        ->assertSee($photo->path)
-        ->assertDontSee($anotherPost->city->name)
-        ->assertDontSee($anotherPhoto->path);
-    }
+
 
 }

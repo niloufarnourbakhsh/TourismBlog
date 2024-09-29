@@ -76,8 +76,14 @@
             </table>
         </div>
 
-        <div class="number-part text-center my-1 bg-danger py-4">
-            {{$posts->links()}}
+        <div class="mt-3 row">
+            <div class="col-5"></div>
+            <div class="col-2">
+                <p>
+                    {{$posts->links()}}
+                </p>
+            </div>
+            <div class="col-5"></div>
         </div>
     </div>
 @endsection

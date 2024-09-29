@@ -21,7 +21,7 @@ class ContactUsManagementTest extends TestCase
         ];
         $this->post('/contact-us', $data)
             ->assertSessionHas('contact-us')
-            ->assertRedirect('/contact.us');
+            ->assertRedirectToRoute('contact.us');
     }
     /** @test */
     public function name_is_required_for_sending_an_email()
@@ -56,17 +56,20 @@ class ContactUsManagementTest extends TestCase
     /** @test */
     public function the_message_is_sent_as_an_email_to_the_admin()
     {
-        Mail::fake();
-        Mail::assertNothingSent();
         $data = [
             'name' => 'nilloo',
             'email' => 'niloo@gmail.com',
             'message' => 'hiiii every body',
         ];
+        Mail::fake();
+        Mail::assertNothingSent();
         $this->post('/contact-us', $data)
             ->assertSessionHas('contact-us')
-            ->assertRedirect('/contact.us');
+            ->assertRedirectToRoute('contact.us');
         Mail::to('nil.noorbakhsh@gmail.com')->send(new ContactUsMail($data['name'],$data['email'],$data['message']));
         Mail::assertSent(ContactUsMail::class);
+        Mail::assertSent(ContactUsMail::class,function (ContactUsMail $email){
+           return $email->hasTo('nil.noorbakhsh@gmail.com');
+        });
     }
 }
