@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\PostController;
@@ -38,10 +39,10 @@ Route::middleware('can:is_admin')->group(function (){
 });
 
 Route::middleware('auth')->group(function (){
-    Route::post('/posts/like/{post}', [PostLikeController::class, 'store'])->name('like.post');
+    Route::post('/posts/like/{post}', [LikeController::class, 'store'])->name('like.post');
     Route::post('/comment/{post}',[CommentController::class,'store'])->name('comment.store');
     Route::delete('/comment/{comment}',[CommentController::class,'delete'])->name('comment.delete');
-    Route::post('/comment/like/{comment}',[CommentController::class,'LikeComment'])->name('like.comment');
+    Route::post('/comment/like/{comment}',[LikeController::class,'store'])->name('like.comment');
 });
 Route::get('/contact-us',[ContactController::class,'create'])->name('contact.us');
 Route::post('/contact-us',[ContactController::class,'store'])->name('contact.us.submit');

@@ -26,15 +26,4 @@ class CommentController extends Controller
         return redirect()->back();
     }
 
-    public function LikeComment(Comment $comment)
-    {
-        if ($comment->likes()->count() === 0) {
-            $comment->AddLike();
-        } else {
-            $like = $comment->likes()->where(['user_id' => Auth::id()])->first();
-            $like ? $comment->DeleteLike() : $comment->AddLike() ;
-        }
-        return redirect()->back();
-    }
-
 }

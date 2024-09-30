@@ -15,7 +15,7 @@ class LikeTest extends TestCase
     {
         $this->signeIn("User");
         $post = Post::factory()->create();
-        $post->likePost();
+        $post->AddLike();
         $this->assertCount(1,Like::all());
     }
     /** @test */
@@ -23,9 +23,9 @@ class LikeTest extends TestCase
     {
         $this->signeIn("User");
         $post = Post::factory()->create();
-        $like=$post->likePost();
+        $like=$post->AddLike();
         $this->assertCount(1,Like::all());
-        $post->takeLikeBack($like);
+        $post->removeLike($like);
         $this->assertCount(0,Like::all());
     }
     /** @test */
@@ -33,10 +33,10 @@ class LikeTest extends TestCase
     {
         $this->signeIn("User");
         $post = Post::factory()->create();
-        $like=$post->likePost();
+        $like=$post->AddLike();
         $this->assertCount(1,Like::all());
         $this->assertTrue($post->showLikesInPost());
-        $post->takeLikeBack($like);
+        $post->removeLike($like);
         $this->assertFalse($post->showLikesInPost());
     }
 }

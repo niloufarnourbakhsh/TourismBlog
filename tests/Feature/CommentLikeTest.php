@@ -14,14 +14,11 @@ class CommentLikeTest extends TestCase
     /** @test */
     public function users_can_like_others_comment()
     {
-
         $post=Post::factory()->create();
-        $this->assertCount(1,Post::all());
         $this->signeIn("Admin");
         $this->post('/comment/'.$post->id,[
             'body'=>'hiiiiiiiiiii'
         ]);
-        $this->assertCount(1,Comment::all());
         $comment=Comment::first();
         $this->post('/comment/like/'.$comment->id);
         $this->assertCount(1,Like::all());

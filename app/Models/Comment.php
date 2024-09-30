@@ -32,7 +32,7 @@ class Comment extends Model
         return $this->likes()->create(['user_id' => Auth::id()]);
     }
 
-    public function DeleteLike()
+    public function removeLike($like)
     {
         return $this->likes()->where(['user_id' => Auth::id()])->delete();
     }

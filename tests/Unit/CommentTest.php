@@ -26,9 +26,9 @@ class CommentTest extends TestCase
         $this->signeIn("User");
         $post=Post::factory()->create();
         $comment= auth()->user()->comments()->create(['body'=>'new Comment','post_id'=>$post->id]);
-        $comment->AddLike();
+        $like=$comment->AddLike();
         $this->assertCount(1,Like::all());
-        $comment->DeleteLike();
+        $comment->removeLike($like);
         $this->assertCount(0,Like::all());
     }
 

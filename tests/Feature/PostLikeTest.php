@@ -74,7 +74,7 @@ class PostLikeTest extends TestCase
         Notification::fake();
         Notification::assertNothingSent();
         $this->signeIn("User");
-        $post->likePost();
+        $post->AddLike();
         $this->assertCount(1,Like::all());
         Notification::assertSentTo($adminUser,PostLikeNotification::class);
         Notification::assertCount(1);
@@ -95,7 +95,7 @@ class PostLikeTest extends TestCase
             'user_id' => $adminUser->id,
         ]);
         $this->signeIn("User");
-        $like=$post->likePost();
+        $like=$post->AddLike();
         $this->assertCount(1,Like::all());
         $this->post('/posts/like/'.$post->id);
         $this->assertCount(0,Like::all());

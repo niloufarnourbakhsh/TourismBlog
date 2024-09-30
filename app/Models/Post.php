@@ -14,9 +14,11 @@ class Post extends Model
 {
     use HasFactory;
     use Sluggable;
+
     protected $guarded;
-    protected $with=['photos'];
-    protected $casts=['is_active'=>'boolean'];
+    protected $with = ['photos'];
+    protected $casts = ['is_active' => 'boolean'];
+
     public function sluggable(): array
     {
         return [
@@ -28,8 +30,9 @@ class Post extends Model
 
     public function path()
     {
-        return '/posts/'.$this->id;
+        return '/posts/' . $this->id;
     }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -42,17 +45,17 @@ class Post extends Model
 
     public function photos()
     {
-       return $this->hasMany(Photo::class);
+        return $this->hasMany(Photo::class);
     }
 
     public function likes()
     {
-        return $this->morphMany(Like::class,'likeable');
+        return $this->morphMany(Like::class, 'likeable');
     }
 
     public function comments()
     {
-       return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class);
     }
 
     public function category()
@@ -62,30 +65,30 @@ class Post extends Model
 
     public function showLikesInPost()
     {
-        if (auth()->check()){
-            return $this->likes()->where(['user_id'=>auth()->id()])->first()?true: false;
-        }else{
+        if (auth()->check()) {
+            return $this->likes()->where(['user_id' => auth()->id()])->first() ? true : false;
+        } else {
             return false;
         }
     }
 
-    public function likePost()
+    public function AddLike()
     {
-        $like=$this->likes()->create(['user_id'=>Auth::id()]);
-        Notification::send($this->user,new PostLikeNotification(\auth()->user(),$like,$this));
+        $like = $this->likes()->create(['user_id' => Auth::id()]);
+        Notification::send($this->user, new PostLikeNotification(\auth()->user(), $like, $this));
         return $like;
     }
 
-    public function takeLikeBack($like)
+    public function removeLike($like)
     {
-        event(new DeleteNotificationEvent($this,$like))
+        event(new DeleteNotificationEvent($this, $like))
         &&
-        $this->likes()->where(['user_id'=>Auth::id()])->delete();
+        $this->likes()->where(['user_id' => Auth::id()])->delete();
     }
 
     public function updateCity($city)
     {
-        return City::whereId($this->city_id)->update(['name'=>$city]);
+        return City::whereId($this->city_id)->update(['name' => $city]);
     }
 
 }
