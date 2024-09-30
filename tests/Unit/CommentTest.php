@@ -14,7 +14,7 @@ class CommentTest extends TestCase
     /** @test */
     public function a_user_can_like_a_other_users_comment()
     {
-        $this->userSigneIN();
+        $this->signeIn("User");
         $post=Post::factory()->create();
        $comment= auth()->user()->comments()->create(['body'=>'new Comment','post_id'=>$post->id]);
        $comment->AddLike();
@@ -23,7 +23,7 @@ class CommentTest extends TestCase
     /** @test */
     public function a_user_can_delete_their_likes()
     {
-        $this->userSigneIN();
+        $this->signeIn("User");
         $post=Post::factory()->create();
         $comment= auth()->user()->comments()->create(['body'=>'new Comment','post_id'=>$post->id]);
         $comment->AddLike();

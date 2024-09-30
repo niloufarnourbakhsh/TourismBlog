@@ -21,7 +21,6 @@ class UserTest extends TestCase
     /** @test */
     public function User_role_is_sent_to_is_admin()
     {
-        $this->withoutExceptionHandling();
         $user=User::factory(Role::create(['name'=>'User']))->create();
         $this->assertFalse($user->IsAdmin());
     }

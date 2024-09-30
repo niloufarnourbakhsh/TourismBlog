@@ -10,16 +10,10 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    public function signeIn($user=null)
+    public function signeIn($role="Admin", $user=null)
     {
-        $role=Role::create(['name' => 'Admin']);
+        $role=Role::create(['name' => $role]);
         $this->actingAs($user=$user ?? User::factory()->create(['role_id'=>$role->id]));
         return $user;
-    }
-    public function userSigneIN($user=null)
-    {
-        $role=Role::create(['name' => 'User']);
-        $this->actingAs($user=$user ?? User::factory()->create(['role_id'=>$role->id]));
-          return $user;
     }
 }

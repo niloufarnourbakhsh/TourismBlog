@@ -18,7 +18,7 @@ class NotificationsTest extends TestCase
     public function admin_can_see_all_the_notifications()
     {
         $post=Post::factory()->create(['user_id'=>$this->signeIn()->id]);
-        $comment=($user=$this->userSigneIN())->comments()->create(['body'=>'hii','post_id'=>$post->id]);
+        $comment=($user=$this->signeIn("User"))->comments()->create(['body'=>'hii','post_id'=>$post->id]);
         Auth::logout();
         $notification=new CommentNotification($user,$comment);
         $this->signeIn()->notify($notification);
@@ -29,7 +29,7 @@ class NotificationsTest extends TestCase
     public function admin_can_mark_a_notifications_as_read()
     {
         $post=Post::factory()->create(['user_id'=>$this->signeIn()->id]);
-        $comment=($user=$this->userSigneIN())->comments()->create(['body'=>'hii','post_id'=>$post->id]);
+        $comment=($user=$this->signeIn("User"))->comments()->create(['body'=>'hii','post_id'=>$post->id]);
         Auth::logout();
         $admin=$this->signeIn();
         $admin->notify(new CommentNotification($user,$comment));

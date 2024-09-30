@@ -16,7 +16,7 @@ class CategoryTest extends TestCase
     /** @test */
     public function a_category_is_created_by_admin()
     {
-        $this->signeIn();
+        $this->signeIn("Admin");
         $this->post('/categories',[
             'name'=>'nature'
         ]);
@@ -37,7 +37,7 @@ class CategoryTest extends TestCase
     /** @test */
     public function name_is_required_for_creating_a_new_category()
     {
-        $this->signeIn();
+        $this->signeIn("Admin");
         $this->post('/categories',[
             'name'=>''
         ])->assertSessionHasErrors('name');
@@ -46,7 +46,7 @@ class CategoryTest extends TestCase
     /** @test */
     public function a_category_can_be_updated()
     {
-        $this->signeIn();
+        $this->signeIn("Admin");
         $this->post('/categories',[
             'name'=>'nature'
         ]);
@@ -65,7 +65,7 @@ class CategoryTest extends TestCase
         $this->patch('/categories/'.$category->id,[
             'name'=>'nature-2'
         ])->assertStatus(403);
-        $this->userSigneIN();
+        $this->signeIn('User');
         $this->patch('/categories/'.$category->id,[
             'name'=>'nature-2'
         ])->assertStatus(403);
@@ -73,7 +73,7 @@ class CategoryTest extends TestCase
     /** @test */
     public function admin_can_delete_a_category()
     {
-        $this->signeIn();
+        $this->signeIn("Admin");
         $this->post('/categories',[
             'name'=>'nature'
         ]);
@@ -84,12 +84,7 @@ class CategoryTest extends TestCase
     /** @test */
     public function an_authenticated_user_or_other_users_can_not_delete_a_category()
     {
-        $this->signeIn();
-        $this->post('/categories',[
-            'name'=>'nature'
-        ]);
-        Auth::logout();
-        $category=Category::first();
+        $category=Category::factory()->create();
         $this->delete('/categories/'.$category->id)->assertStatus(403);
     }
 }

@@ -15,7 +15,7 @@ class galleryManagementTest extends TestCase
     /** @test */
     public function only_posts_of_a_specific_category_is_shown_on_gallery()
     {
-        $this->signeIn();
+        $this->signeIn("Admin");
         $post=Post::factory(City::factory())->create();
         $photo=Photo::factory()->create(['post_id'=>$post->id]);
         $anotherPhoto=Photo::factory( $anotherPost=Post::factory(City::factory())->create())->create();

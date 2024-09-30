@@ -13,7 +13,7 @@ class LikeTest extends TestCase
     /** @test */
     public function users_can_like_a_post()
     {
-        $this->userSigneIN();
+        $this->signeIn("User");
         $post = Post::factory()->create();
         $post->likePost();
         $this->assertCount(1,Like::all());
@@ -21,7 +21,7 @@ class LikeTest extends TestCase
     /** @test */
     public function users_can_take_the_like_back()
     {
-        $this->userSigneIN();
+        $this->signeIn("User");
         $post = Post::factory()->create();
         $like=$post->likePost();
         $this->assertCount(1,Like::all());
@@ -31,7 +31,7 @@ class LikeTest extends TestCase
     /** @test */
     public function a_user_want_to_see_if_they_has_liked_a_post()
     {
-        $this->userSigneIN();
+        $this->signeIn("User");
         $post = Post::factory()->create();
         $like=$post->likePost();
         $this->assertCount(1,Like::all());

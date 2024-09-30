@@ -34,7 +34,7 @@ class ManagePostTest extends TestCase
     {
         $this->get('/posts')
             ->assertStatus(403);
-        $this->userSigneIN();
+        $this->signeIn("User");
         $this->get('/posts')
             ->assertStatus(403);
     }
@@ -49,7 +49,7 @@ class ManagePostTest extends TestCase
     /** @test */
     public function other_users_or_guests_can_not_see_create_page()
     {
-        $this->userSigneIN();
+        $this->signeIn("User");
         $this->get('posts/create')->assertStatus(403);
         Auth::logout();
         $this->get('posts/create')->assertStatus(403);
@@ -66,7 +66,7 @@ class ManagePostTest extends TestCase
     public function an_authenticated_user_or_other_users_can_not_store_a_post()
     {
         $this->post('/posts/', Post::factory()->create()->toArray())->assertStatus(403);
-        $this->userSigneIN();
+        $this->signeIn("User");
         $this->post('/posts/', Post::factory()->create()->toArray())->assertStatus(403);
     }
     /** @test */
@@ -208,7 +208,7 @@ class ManagePostTest extends TestCase
     {
         $post = Post::factory()->create();
         $this->delete('/posts/' . $post->id)->assertStatus(403);
-        $this->userSigneIN();
+        $this->signeIn("User");
         $this->delete('/posts/' . $post->id)->assertStatus(403);
     }
 

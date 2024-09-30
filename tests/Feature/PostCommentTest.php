@@ -17,7 +17,7 @@ class PostCommentTest extends TestCase
     /** @test */
     public function a_user_can_leave_a_comment()
     {
-        $this->userSigneIN();
+        $this->signeIn("User");
         $post=Post::factory()->create();
         $this->post('/comment/'.$post->id,[
             'body'=>'new Comment'
@@ -30,7 +30,7 @@ class PostCommentTest extends TestCase
         $post=Post::factory()->create(['user_id'=>$this->signeIn()->id]);
         Notification::fake();
         Notification::assertNothingSent();
-        $this->userSigneIN();
+        $this->signeIn("User");
         $this->post('/comment/'.$post->id,$comment=[
             'body'=>'new Comment',
         ]);
@@ -51,7 +51,7 @@ class PostCommentTest extends TestCase
     /** @test */
     public function Body_is_required_for_creating_a_comment()
     {
-        $this->userSigneIN();
+        $this->signeIn("User");
         $post=Post::factory()->create();
         $this->post('/comment/'.$post->id,[
             'body'=>''
@@ -60,7 +60,7 @@ class PostCommentTest extends TestCase
     /** @test */
     public function admin_can_delete_other_users_comment()
     {
-        $this->userSigneIN();
+        $this->signeIn("User");
         $post=Post::factory()->create();
         auth()->user()->comments()->create($comment=['body'=>'new Comment','post_id'=>$post->id]);
         $this->assertDatabaseHas(Comment::class,$comment);
@@ -72,7 +72,7 @@ class PostCommentTest extends TestCase
     /** @test */
     public function a_user_can_delete_their_comments()
     {
-        $this->userSigneIN();
+        $this->signeIn("User");
         $post=Post::factory()->create();
         $this->post('/comment/'.$post->id,$comment=[
             'body'=>'a comment'
@@ -84,7 +84,7 @@ class PostCommentTest extends TestCase
     /** @test */
     public function after_deleting_a_comment_the_notification_get_deleted()
     {
-        $this->userSigneIN();
+        $this->signeIn("User");
         $post=Post::factory()->create();
         $this->post('/comment/'.$post->id,[
             'body'=>'new Comment'

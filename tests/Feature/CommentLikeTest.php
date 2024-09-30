@@ -17,7 +17,7 @@ class CommentLikeTest extends TestCase
 
         $post=Post::factory()->create();
         $this->assertCount(1,Post::all());
-        $this->signeIn();
+        $this->signeIn("Admin");
         $this->post('/comment/'.$post->id,[
             'body'=>'hiiiiiiiiiii'
         ]);
@@ -32,7 +32,7 @@ class CommentLikeTest extends TestCase
     {
         $post=Post::factory()->create();
         $this->assertCount(1,Post::all());
-        $this->signeIn();
+        $this->signeIn('Admin');
         $this->post('/comment/'.$post->id,[
             'body'=>'hiiiiiiiiiii'
         ]);
