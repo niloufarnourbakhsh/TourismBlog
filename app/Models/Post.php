@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
-use App\Events\DeleteNotificationEvent;
-use App\Notifications\PostLikeNotification;
+
+use App\Traits\LikeTrait;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Notification;
+
+
 
 class Post extends Model
 {
     use HasFactory;
     use Sluggable;
+    use LikeTrait;
 
     protected $guarded;
     protected $with = ['photos'];
@@ -48,10 +49,6 @@ class Post extends Model
         return $this->hasMany(Photo::class);
     }
 
-    public function likes()
-    {
-        return $this->morphMany(Like::class, 'likeable');
-    }
 
     public function comments()
     {
@@ -72,19 +69,19 @@ class Post extends Model
         }
     }
 
-    public function AddLike()
-    {
-        $like = $this->likes()->create(['user_id' => Auth::id()]);
-        Notification::send($this->user, new PostLikeNotification(\auth()->user(), $like, $this));
-        return $like;
-    }
+//    public function AddLike()
+//    {
+//        $like = $this->likes()->create(['user_id' => Auth::id()]);
+//
+//        return $like;
+//    }
 
-    public function removeLike($like)
-    {
-        event(new DeleteNotificationEvent($this, $like))
-        &&
-        $this->likes()->where(['user_id' => Auth::id()])->delete();
-    }
+//    public function removeLike($like)
+//    {
+//
+//        &&
+//        $this->likes()->where(['user_id' => Auth::id()])->delete();
+//    }
 
     public function updateCity($city)
     {

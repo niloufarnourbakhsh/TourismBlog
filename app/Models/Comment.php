@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+use App\Traits\LikeTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
+
 
 class Comment extends Model
 {
-    use HasFactory;
+    use LikeTrait;
+    use HasFactory ;
+
 
     protected $guarded;
 
@@ -22,19 +25,6 @@ class Comment extends Model
         return $this->belongsTo(Comment::class);
     }
 
-    public function likes()
-    {
-        return $this->morphMany(Like::class, 'likeable');
-    }
 
-    public function AddLike()
-    {
-        return $this->likes()->create(['user_id' => Auth::id()]);
-    }
-
-    public function removeLike($like)
-    {
-        return $this->likes()->where(['user_id' => Auth::id()])->delete();
-    }
 
 }
