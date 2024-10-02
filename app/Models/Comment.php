@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     use LikeTrait;
-    use HasFactory ;
+    use HasFactory;
 
 
     protected $guarded;
@@ -24,7 +24,5 @@ class Comment extends Model
     {
         return $this->belongsTo(Comment::class);
     }
-
-
 
 }

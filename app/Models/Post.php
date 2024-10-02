@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-
 class Post extends Model
 {
     use HasFactory;
@@ -68,20 +67,6 @@ class Post extends Model
             return false;
         }
     }
-
-//    public function AddLike()
-//    {
-//        $like = $this->likes()->create(['user_id' => Auth::id()]);
-//
-//        return $like;
-//    }
-
-//    public function removeLike($like)
-//    {
-//
-//        &&
-//        $this->likes()->where(['user_id' => Auth::id()])->delete();
-//    }
 
     public function updateCity($city)
     {
