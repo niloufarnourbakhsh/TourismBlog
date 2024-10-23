@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\Comment;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,7 +17,7 @@ class CommentNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(protected User $user,public Comment $comment)
+    public function __construct(protected User $user,public Comment $comment,public Post $post)
     {
     }
 
@@ -51,6 +52,7 @@ class CommentNotification extends Notification
         return [
             'user_name'=>$this->user->name,
             'comment_id'=>$this->comment->id,
+            'post'=>$this->post->slug
         ];
     }
 }

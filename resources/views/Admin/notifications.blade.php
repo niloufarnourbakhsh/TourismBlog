@@ -9,7 +9,9 @@
                         @if($notification->type==='App\Notifications\PostLikeNotification')
                             <p>
                                 {{$notification ->data['user_name']}}
-                                پست شما را لایک کرد
+                                پست
+                                {{$notification->data['post']}}
+                                شما را لایک کرد
                             </p>
                         @if($notification->read_at===null)
                                 <p>
@@ -25,7 +27,9 @@
                         @if($notification->type==='App\Notifications\CommentNotification')
                                 <p>
                                     {{$notification ->data['user_name']}}
-                                    یک کامنت جدید برای شما گذاشته است
+                                    یک کامنت جدید برای پست
+                                    <a href="{{route('posts.show',$notification->data['post'])}}">{{$notification->data['post']}}</a>
+                                    گذاشته است
                                 </p>
                                 @if($notification->read_at===null)
                                     <p>
