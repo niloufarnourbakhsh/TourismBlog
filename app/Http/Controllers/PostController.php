@@ -9,6 +9,7 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Models\City;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
 
@@ -16,7 +17,9 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::query()->with('City')->paginate(4);
+       $posts= Cache::remember('posts',now()->addMinute(5),function (){
+            Post::query()->with('City')->paginate(4);
+        });
         return view('Admin.index')->with('posts', $posts);
     }
 
