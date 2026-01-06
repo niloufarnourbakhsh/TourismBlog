@@ -26,8 +26,8 @@ cp .env.example .env
 php artisan key:generate
 php artisan migrate
 php artisan serve
- ## 🔹 About Me
- Hi, I’m Niloufar.  
+- ## 🔹 Aboute Me
+Hi, I’m Niloufar.  
 This is my Laravel project called Tourism Blog.  
  I built this project to demonstrate my backend skills including CRUD operations,
 authentication, and clean project structure.
