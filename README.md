@@ -38,4 +38,6 @@ readable code, following best practices, and continuously improving my skills.
 This project is part of my portfolio and was built to demonstrate my ability
 to design and implement real-world Laravel applications.
 
+## 🔹 About me
+
 
