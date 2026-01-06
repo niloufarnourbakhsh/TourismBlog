@@ -1,3 +1,13 @@
+## 🔹 About Me
+
+Hi 👋  
+I'm Niloufar, a Laravel developer with a strong interest in building clean,
+maintainable, and scalable web applications.
+I mainly work with PHP and Laravel and enjoy developing backend logic,
+RESTful APIs, and database-driven applications. I care about writing
+readable code, following best practices, and continuously improving my skills.
+This project is part of my portfolio and was built to demonstrate my ability
+to design and implement real-world Laravel applications.
 # Tourism Blog (Laravel)
 
 A tourism blog platform built with Laravel where users can read travel posts
@@ -27,17 +37,7 @@ php artisan key:generate
 php artisan migrate
 php artisan serve
 
-## 🔹 About Me
 
-Hi 👋  
-I'm Niloufar, a Laravel developer with a strong interest in building clean,
-maintainable, and scalable web applications.
-I mainly work with PHP and Laravel and enjoy developing backend logic,
-RESTful APIs, and database-driven applications. I care about writing
-readable code, following best practices, and continuously improving my skills.
-This project is part of my portfolio and was built to demonstrate my ability
-to design and implement real-world Laravel applications.
 
-## 🔹 About me
 
 
