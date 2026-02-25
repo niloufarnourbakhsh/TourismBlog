@@ -9,8 +9,8 @@ class Role extends Model
 {
     use HasFactory;
 
-    const Role_Admin = "Admin";
-    const Role_User = "User";
+    const ROLE_ADMIN = "admin";
+    const ROLE_USER = "user";
     protected $fillable = ['name'];
 
     public function users()

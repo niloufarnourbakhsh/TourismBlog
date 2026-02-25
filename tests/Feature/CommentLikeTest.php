@@ -15,7 +15,7 @@ class CommentLikeTest extends TestCase
     public function users_can_like_others_comment()
     {
         $post=Post::factory()->create();
-        $this->signeIn("Admin");
+        $this->signIn("Admin");
         $this->post('/comment/'.$post->id,[
             'body'=>'hiiiiiiiiiii'
         ]);
@@ -29,7 +29,7 @@ class CommentLikeTest extends TestCase
     {
         $post=Post::factory()->create();
         $this->assertCount(1,Post::all());
-        $this->signeIn('Admin');
+        $this->signIn('Admin');
         $this->post('/comment/'.$post->id,[
             'body'=>'hiiiiiiiiiii'
         ]);

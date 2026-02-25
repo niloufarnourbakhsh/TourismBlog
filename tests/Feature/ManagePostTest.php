@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
+use Throwable;
 
 class ManagePostTest extends TestCase
 {
@@ -23,7 +24,7 @@ class ManagePostTest extends TestCase
     /** @test */
     public function admin_can_see_the_posts_for_managing_them()
     {
-        $this->signeIn();
+        $this->signIn();
         $post = Post::factory()->create();
         $this->get('/posts')
             ->assertStatus(200)
@@ -34,7 +35,7 @@ class ManagePostTest extends TestCase
     {
         $this->get('/posts')
             ->assertStatus(403);
-        $this->signeIn("User");
+        $this->signIn("User");
         $this->get('/posts')
             ->assertStatus(403);
     }
@@ -42,14 +43,14 @@ class ManagePostTest extends TestCase
     /** @test */
     public function Just_admin_see_the_create_page()
     {
-        $this->signeIn();
+        $this->signIn();
         $this->get('posts/create')->assertStatus(200);
     }
 
     /** @test */
     public function other_users_or_guests_can_not_see_create_page()
     {
-        $this->signeIn("User");
+        $this->signIn("User");
         $this->get('posts/create')->assertStatus(403);
         Auth::logout();
         $this->get('posts/create')->assertStatus(403);
@@ -58,51 +59,51 @@ class ManagePostTest extends TestCase
     /** @test */
     public function a_post_can_be_created()
     {
-        $this->signeIn();
+        $this->signIn();
         $this->post('/posts/', Post::factory()->create()->toArray());
         $this->assertCount(1, Post::all());
     }
     /** @test */
     public function an_authenticated_user_or_other_users_can_not_store_a_post()
     {
-        $this->post('/posts/', Post::factory()->create()->toArray())->assertStatus(403);
-        $this->signeIn("User");
-        $this->post('/posts/', Post::factory()->create()->toArray())->assertStatus(403);
+        $this->post('/posts/', Post::factory()->raw())->assertStatus(403);
+        $this->signIn("User");
+        $this->post('/posts/', Post::factory()->raw())->assertStatus(403);
     }
     /** @test */
     public function a_post_requires_a_city()
     {
-        $this->signeIn();
+        $this->signIn();
         $this->post('/posts/', array_merge( Post::factory()->create()->toArray(), ['city' => '']))
             ->assertSessionHasErrors('city');
     }
     /** @test */
     public function a_post_requires_a_title()
     {
-        $this->signeIn();
-        $this->post('/posts/', Post::factory()->create(['title' => ''])->toArray())
+        $this->signIn();
+        $this->post('/posts/', Post::factory()->create(['title' => ''])->getRawOriginal())
             ->assertSessionHasErrors('title');
     }
 
     /** @test */
     public function a_post_requires_a_body()
     {
-        $this->signeIn();
-        $this->post('/posts/', Post::factory()->create(['body' => ''])->toArray())
+        $this->signIn();
+        $this->post('/posts/', Post::factory()->create(['body' => ''])->getRawOriginal())
             ->assertSessionHasErrors('body');
     }
 
     /** @test */
     public function food_is_nullable_in_the_post()
     {
-        $this->signeIn();
+        $this->signIn();
         $this->post('/posts/', Post::factory()->create(['food' => ''])->toArray())
             ->assertSessionDoesntHaveErrors('food');
     }
     /** @test */
     public function touristAttraction_is_nullable_in_the_post()
     {
-        $this->signeIn();
+        $this->signIn();
         $this->post('/posts/', Post::factory()->create(['touristAttraction' => ''])->toArray())
             ->assertSessionDoesntHaveErrors('touristAttraction');
     }
@@ -110,14 +111,14 @@ class ManagePostTest extends TestCase
     /** @test */
     public function a_post_must_have_at_least_one_photo()
     {
-        $this->signeIn();
+        $this->signIn();
         $post = array_merge(($post= Post::factory()->create())->toArray(), ['city' => $post->city->name]);
         $this->post('/posts/', $post)->assertSessionHasErrors('file');
     }
     /** @test */
     public function the_event_must_dispatch_after_data_insertion()
     {
-        $this->signeIn();
+        $this->signIn();
         $this->post('/posts/', array_merge(Post::factory()->create()->toArray(),[
             'file'=>['ahvaz.jpg'],
             'city'=>$this->faker->city
@@ -130,7 +131,7 @@ class ManagePostTest extends TestCase
     /** @test */
     public function a_photo_of_the_post_can_uploaded()
     {
-        $this->signeIn();
+        $this->signIn();
         Storage::fake('public');
         $file = UploadedFile::fake()->image('ahvaz.jpg');
         $this->post('/posts', array_merge(Post::factory()->create()->toArray(),[
@@ -144,7 +145,7 @@ class ManagePostTest extends TestCase
     /** @test */
     public function admin_can_update_the_post()
     {
-        $this->signeIn();
+        $this->signIn();
         $this->post('/posts/',($post=Post::factory()->create())->toArray());
         $this->patch($post->path(), $attributes=[
             'title' => 'Tehran',
@@ -175,7 +176,7 @@ class ManagePostTest extends TestCase
     /** @test */
     public function check_if_the_photo_that_uploaded_can_be_removed()
     {
-        $this->signeIn();
+        $this->signIn();
         Storage::fake('public');
         $file = UploadedFile::fake()->image('ahvaz.jpg');
         $this->post('/posts', array_merge(($post=Post::factory()->create())->toArray(),[
@@ -196,7 +197,7 @@ class ManagePostTest extends TestCase
         $this->assertCount(1, City::all());
         Event::fake();
         Event::assertNotDispatched(DeletePhoto::class);
-        $this->signeIn();
+        $this->signIn();
         $this->delete('/posts/' . $post->id);
         Event::dispatch(DeletePhoto::class);
         Event::assertDispatched(DeletePhoto::class);
@@ -208,7 +209,7 @@ class ManagePostTest extends TestCase
     {
         $post = Post::factory()->create();
         $this->delete('/posts/' . $post->id)->assertStatus(403);
-        $this->signeIn("User");
+        $this->signIn("User");
         $this->delete('/posts/' . $post->id)->assertStatus(403);
     }
 
@@ -224,8 +225,8 @@ class ManagePostTest extends TestCase
     /** @test */
     public function activity_of_the_post_can_change()
     {
-        $this->signeIn();
-        $this->post('/posts/', ($post=Post::factory()->create())->toArray());
+        $this->signIn();
+        $post=Post::factory()->create();
         $this->patch('/posts/active/' . $post->id, [
             'is_active' => false
         ]);
@@ -238,8 +239,8 @@ class ManagePostTest extends TestCase
     /** @test */
     public function only_active_post_is_shown_on_the_gallery()
     {
-        $this->signeIn();
-        $this->post('/posts/', ($post=Post::factory()->create())->toArray());
+        $this->signIn();
+        $post=Post::factory()->create();
         $this->get('/gallery')->assertSee($post->city->name)
             ->assertSee($post->photo);
         $post=Post::first();
@@ -248,7 +249,5 @@ class ManagePostTest extends TestCase
         ]);
         $this->get('/gallery')->assertDontSee($post->city->name)
         ->assertDontSee($post->photo);
-}
-
-
+    }
 }

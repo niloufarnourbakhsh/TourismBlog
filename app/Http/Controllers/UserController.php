@@ -12,10 +12,9 @@ class UserController extends Controller
     public function index()
     {
         $users=User::query()->whereHas('role',function ($query){
-            $query->where(['name'=>Role::Role_User]);
+            $query->where(['name'=>Role::ROLE_USER]);
         })->paginate(5);
         return view('admin.users')->with('users', $users);
-
     }
     public function delete(User $user)
     {

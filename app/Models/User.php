@@ -59,8 +59,8 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
-    public function IsAdmin(): bool
+    public function isAdmin(): bool
     {
-        return $this->role->name === Role::Role_Admin;
+        return strtolower($this->role?->name) === Role::ROLE_ADMIN;
     }
 }

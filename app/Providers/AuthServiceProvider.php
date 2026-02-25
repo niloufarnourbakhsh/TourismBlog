@@ -25,10 +25,10 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::define('is_admin',function (User $user){
-            return $user->IsAdmin();
+            return $user->isAdmin();
         });
         Gate::define('delete_comment',function (User $user,Comment $comment){
-           return auth()->id()==$comment->user_id || auth()->user()->IsAdmin();
+           return auth()->id()==$comment->user_id || auth()->user()->isAdmin();
         });
     }
 }

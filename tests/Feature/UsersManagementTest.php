@@ -11,23 +11,25 @@ use Tests\TestCase;
 class UsersManagementTest extends TestCase
 {
     use RefreshDatabase;
-
     /** @test */
     public function admin_can_see_user_information_in_users_view()
     {
-        $this->signeIn();
-        $user = User::factory()->create();
-        $this->get('/users')
-            ->assertSee($user->id)
-            ->assertSee($user->name)
-            ->assertSee($user->email);
+        $role = Role::firstOrCreate([
+            'name' => Role::ROLE_USER
+        ]);
+        $user = User::factory()->create(['role_id'=>$role->id]);
+        $this->signIn(Role::ROLE_ADMIN);
+        $response=$this->get(route('users'));
+            $response->assertSeeText($user->id);
+            $response->assertSeeText($user->name);
+            $response->assertSeeText($user->email);
     }
 
     /** @test */
     public function admin_can_remove_a_user_from_the_app()
     {
         $user = User::factory()->create(['role_id'=>2]);
-        $this->signeIn();
+        $this->signIn();
         $this->assertDatabaseHas(User::class,[
             'name'=>$user->name,
             'email'=>$user->email

@@ -20,7 +20,7 @@ class PostLikeTest extends TestCase
     public function a_user_can_like_a_post()
     {
         $post=Post::factory()->create();
-        $this->signeIn();
+        $this->signIn();
         $this->post('/posts/like/'.$post->id);
         $this->assertCount(1,Like::all());
     }
@@ -54,7 +54,7 @@ class PostLikeTest extends TestCase
         Notification::fake();
         Notification::assertNothingSent();
 
-        $this->signeIn("User");
+        $this->signIn(Role::ROLE_USER);
 
         $this->post('/posts/like/' . $post->id);
         $this->assertCount(1, Like::all());
@@ -73,7 +73,7 @@ class PostLikeTest extends TestCase
         ]);
         Notification::fake();
         Notification::assertNothingSent();
-        $this->signeIn("User");
+        $this->signIn(Role::ROLE_USER);
         $post->AddLike();
         $this->assertCount(1,Like::all());
         Notification::assertSentTo($adminUser,PostLikeNotification::class);
@@ -94,7 +94,7 @@ class PostLikeTest extends TestCase
         $post = Post::factory()->create([
             'user_id' => $adminUser->id,
         ]);
-        $this->signeIn("User");
+        $this->signIn(Role::ROLE_USER);
         $like=$post->AddLike();
         $this->assertCount(1,Like::all());
         $this->post('/posts/like/'.$post->id);

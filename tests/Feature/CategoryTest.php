@@ -12,11 +12,11 @@ use Tests\TestCase;
 
 class CategoryTest extends TestCase
 {
-    Use RefreshDatabase;
+    use RefreshDatabase;
     /** @test */
     public function a_category_is_created_by_admin()
     {
-        $this->signeIn("Admin");
+        $this->signIn(Role::ROLE_ADMIN);
         $this->post('/categories',[
             'name'=>'nature'
         ]);
@@ -37,7 +37,7 @@ class CategoryTest extends TestCase
     /** @test */
     public function name_is_required_for_creating_a_new_category()
     {
-        $this->signeIn("Admin");
+        $this->signIn(Role::ROLE_ADMIN);
         $this->post('/categories',[
             'name'=>''
         ])->assertSessionHasErrors('name');
@@ -46,7 +46,7 @@ class CategoryTest extends TestCase
     /** @test */
     public function a_category_can_be_updated()
     {
-        $this->signeIn("Admin");
+        $this->signIn(Role::ROLE_ADMIN);
         $this->post('/categories',[
             'name'=>'nature'
         ]);
@@ -65,7 +65,7 @@ class CategoryTest extends TestCase
         $this->patch('/categories/'.$category->id,[
             'name'=>'nature-2'
         ])->assertStatus(403);
-        $this->signeIn('User');
+        $this->signIn(Role::ROLE_USER);
         $this->patch('/categories/'.$category->id,[
             'name'=>'nature-2'
         ])->assertStatus(403);
@@ -73,7 +73,7 @@ class CategoryTest extends TestCase
     /** @test */
     public function admin_can_delete_a_category()
     {
-        $this->signeIn("Admin");
+        $this->signIn(Role::ROLE_ADMIN);
         $this->post('/categories',[
             'name'=>'nature'
         ]);

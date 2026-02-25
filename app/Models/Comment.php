@@ -11,8 +11,6 @@ class Comment extends Model
 {
     use LikeTrait;
     use HasFactory;
-
-
     protected $guarded;
 
     public function user()

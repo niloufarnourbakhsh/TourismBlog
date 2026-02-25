@@ -9,10 +9,11 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
-
-    public function signeIn($role="Admin", $user=null)
+    public function signIn($role=Role::ROLE_ADMIN, $user=null)
     {
-        $role=Role::create(['name' => $role]);
+        $role = Role::firstOrCreate([
+            'name' => $role
+        ]);
         $this->actingAs($user=$user ?? User::factory()->create(['role_id'=>$role->id]));
         return $user;
     }

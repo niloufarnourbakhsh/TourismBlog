@@ -14,15 +14,15 @@ class UserTest extends TestCase
     /** @test */
     public function admin_role_is_sent_to_is_admin()
     {
-        $adminRole = Role::create(['name' => 'Admin']);
+        $adminRole = Role::create(['name' => Role::ROLE_ADMIN]);
         $user = User::factory()->create(['role_id' => $adminRole->id]);
-        $this->assertTrue($user->IsAdmin());
+        $this->assertTrue($user->isAdmin());
     }
     /** @test */
     public function User_role_is_sent_to_is_admin()
     {
-        $user=User::factory(Role::create(['name'=>'User']))->create();
-        $this->assertFalse($user->IsAdmin());
+        $user=User::factory(Role::create(['name'=>Role::ROLE_USER]))->create();
+        $this->assertFalse($user->isAdmin());
     }
     /** @test */
     public function a_user_can_have_many_project()

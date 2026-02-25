@@ -17,9 +17,11 @@ class PostController extends Controller
 {
     public function index()
     {
-       $posts= Cache::remember('posts',now()->addMinute(5),function (){
-            Post::query()->with('City')->paginate(4);
-        });
+//       $posts= Cache::remember('posts',now()->addMinute(5),function (){
+//            Post::query()->with('City')->paginate(4);
+//        });
+       $posts=Post::query()->with('City')->paginate(4);
+
         return view('Admin.index')->with('posts', $posts);
     }
 

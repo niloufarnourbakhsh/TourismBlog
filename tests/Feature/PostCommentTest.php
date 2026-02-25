@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Role;
 use App\Models\User;
 use App\Notifications\CommentNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -17,7 +18,7 @@ class PostCommentTest extends TestCase
     /** @test */
     public function a_user_can_leave_a_comment()
     {
-        $this->signeIn("User");
+        $this->signIn(Role::ROLE_USER);
         $post=Post::factory()->create();
         $this->post('/comment/'.$post->id,[
             'body'=>'new Comment'
@@ -27,10 +28,10 @@ class PostCommentTest extends TestCase
     /** @test */
     public function a_notification_will_send_to_admin_after_leaving_a_comment()
     {
-        $post=Post::factory()->create(['user_id'=>$this->signeIn()->id]);
+        $post=Post::factory()->create(['user_id'=>$this->signIn()->id]);
         Notification::fake();
         Notification::assertNothingSent();
-        $this->signeIn("User");
+        $this->signIn(Role::ROLE_USER);
         $this->post('/comment/'.$post->id,$comment=[
             'body'=>'new Comment',
         ]);
@@ -51,7 +52,7 @@ class PostCommentTest extends TestCase
     /** @test */
     public function Body_is_required_for_creating_a_comment()
     {
-        $this->signeIn("User");
+        $this->signIn(Role::ROLE_USER);
         $post=Post::factory()->create();
         $this->post('/comment/'.$post->id,[
             'body'=>''
@@ -60,19 +61,19 @@ class PostCommentTest extends TestCase
     /** @test */
     public function admin_can_delete_other_users_comment()
     {
-        $this->signeIn("User");
+        $this->signIn(Role::ROLE_USER);
         $post=Post::factory()->create();
         auth()->user()->comments()->create($comment=['body'=>'new Comment','post_id'=>$post->id]);
         $this->assertDatabaseHas(Comment::class,$comment);
         Auth::logout();
-        $this->signeIn();
+        $this->signIn();
         $this->delete('/comment/'.Comment::first()->id);
         $this->assertDatabaseMissing(Comment::class,$comment);
     }
     /** @test */
     public function a_user_can_delete_their_comments()
     {
-        $this->signeIn("User");
+        $this->signIn(Role::ROLE_USER);
         $post=Post::factory()->create();
         $this->post('/comment/'.$post->id,$comment=[
             'body'=>'a comment'
@@ -84,7 +85,7 @@ class PostCommentTest extends TestCase
     /** @test */
     public function after_deleting_a_comment_the_notification_get_deleted()
     {
-        $this->signeIn("User");
+        $this->signIn(Role::ROLE_USER);
         $post=Post::factory()->create();
         $this->post('/comment/'.$post->id,[
             'body'=>'new Comment'

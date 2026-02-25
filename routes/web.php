@@ -8,8 +8,8 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\PostLikeController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,10 +46,10 @@ Route::middleware('auth')->group(function (){
 });
 Route::get('/contact-us',[ContactController::class,'create'])->name('contact.us');
 Route::post('/contact-us',[ContactController::class,'store'])->name('contact.us.submit');
-Route::view('/about-us','Users.about-us')->name('about.us');
 Route::get('/posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
 Route::get('/gallery',GalleryController::class)->name('gallery');
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::view('/about-us','Users.about-us')->name('about.us');
 
 Route::view('example','Includes.admin-view');
