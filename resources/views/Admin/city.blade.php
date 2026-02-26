@@ -11,7 +11,7 @@
                     <div>
                         <form action="{{route('cities.store')}}" method="post">
                             @csrf
-                            <label for="name" class="text-white">نام گروه</label>
+                            <label for="name" class="text-white">نام شهر</label>
                             <input type="text" name="name" id="name" class="form-control">
                             <div class="d-grid gap-2 mt-2">
                                 <button class="btn bg-orange text-white " type="submit">ذخیره</button>
@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="col-6">
-                <h6 class=" text-black p-2 rounded mb-3 my-2 mt-3" >طبقه بندی موجود</h6>
+                <h6 class=" text-black p-2 rounded mb-3 my-2 mt-3" > شهرهای موجود</h6>
                 <table>
                     <thead>
                     <th class="px-1">ID</th>
