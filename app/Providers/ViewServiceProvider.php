@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\View\Composer\CategoriesClass;
+use App\View\Composer\CitiesClass;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,5 +23,6 @@ class ViewServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer(['Admin.*','Users.gallery'],CategoriesClass::class);
+        View::composer(['Admin.*','Users.gallery'],CitiesClass::class);
     }
 }

@@ -10,7 +10,7 @@ class City extends Model
     use HasFactory;
     protected $guarded;
 
-    public function post()
+    public function posts()
     {
         return $this->hasOne(Post::class);
     }

@@ -2,19 +2,16 @@
 
 namespace App\Http\Requests;
 
-use App\Models\City;
-use App\Models\Post;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Gate;
 
-class UpdatePostRequest extends FormRequest
+class CityCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Gate::allows('is_admin');
+        return true;
     }
 
     /**
@@ -25,15 +22,7 @@ class UpdatePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'=>'required',
-            'body'=>'required',
-            'city_id' => 'required|exists:cities,id',
-            'category_id' => 'required|exists:categories,id',
-            'food'=>'sometimes',
-            'touristAttraction'=>'sometimes',
-            'file'=>'sometimes',
+            'name'=>'required'
         ];
     }
-
-
 }

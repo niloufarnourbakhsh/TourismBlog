@@ -16,14 +16,18 @@
                         @endif
                     </div>
                     <div class="form-group">
-                        <label for="city">شهر</label>
-                        <input class="form-control" name="city" id="city">
-                        @if($errors->first('city'))
-                            <p class="fw-bolder">{{$errors->first('city')}}</p>
+                        <label for="city">  شهر</label>
+                        <select name="city_id" class="form-control" id="city">
+                            @foreach($cities as $city)
+                                <option value="{{$city->id}}">{{$city->name}}</option>
+                            @endforeach
+                        </select>
+                        @if($errors->first('city_id'))
+                            <p class="fw-bolder">{{$errors->first('city_id')}}</p>
                         @endif
                     </div>
                     <div class="form-group">
-                        <label for="city"> دسته بندی</label>
+                        <label for="category_id"> دسته بندی</label>
                         <select name="category_id" class="form-control">
                             @foreach($categories as $category)
                                 <option value="{{$category->id}}">{{$category->name}}</option>

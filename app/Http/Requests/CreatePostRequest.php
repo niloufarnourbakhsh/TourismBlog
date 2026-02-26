@@ -26,12 +26,13 @@ class CreatePostRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
             'title' => 'required',
             'body' => 'required',
-            'city' => 'required',
+            'city_id' => 'required|exists:cities,id',
             'file' => 'required',
-            'category_id' => 'required',
+            'category_id' => 'required|exists:categories,id',
             'food' => 'sometimes',
             'touristAttraction' => 'sometimes',
         ];

@@ -24,12 +24,18 @@
                         @endif
                     </div>
                     <div class="form-group">
-                        <label for="city">شهر</label>
-                        <input class="form-control" name="city" id="city" value="{{$post->city->name}}">
-                        @if($errors->first('city'))
-                            <p class="fw-bolder">{{$errors->first('city')}}</p>
+                        <label for="city"> شهر </label>
+                        <select name="city_id" class="form-control" id="city">
+                            @foreach($cities as $city)
+                                <option value="{{$city->id}}"
+                                        @if($city->id===$post->city_id) selected @endif> {{$city->name}}
+                                </option>
+
+                            @endforeach
+                        </select>
+                        @if($errors->first('city_id'))
+                            <p class="fw-bolder">{{$errors->first('city_id')}}</p>
                         @endif
-                        <input type="hidden" value="{{$post->city->id}}" name="city_id">
                     </div>
                     <div class="form-group">
                         <label for="category_id"> دسته بندی</label>

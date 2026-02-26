@@ -32,10 +32,14 @@ class PostController extends Controller
 
     public function store(CreatePostRequest $request)
     {
-        $data = array_merge($request->only('title', 'body', 'food', 'touristAttraction', 'category_id'), [
-            'city_id' => City::create(['name' => $request->city])->id,
+        $post=auth()->user()->posts()->create([
+            'title'=>$request->title,
+            'body'=>$request->body,
+            'city_id'=>$request->city_id,
+            'category_id'=>$request->category_id,
+            'food'=>$request->food,
+            'touristAttraction'=>$request->touristAttraction
         ]);
-        $post=auth()->user()->posts()->create($data);
         $images = $request->file;
         event(new InsertPhoto($post, $images));
         return redirect()->back();
@@ -49,10 +53,7 @@ class PostController extends Controller
 
     public function update(UpdatePostRequest $request, Post $post)
     {
-        if ($request->city){
-            $post->updateCity($request->city);
-        }
-        tap($post->update($request->except(['city','city_id','file'])));
+        tap($post->update($request->except(['file'])));;
         if ($images = $request->file) {
             event(new InsertPhoto($post, $images));
         }
@@ -75,7 +76,6 @@ class PostController extends Controller
         if ($post->photos()) {
             event(new DeletePhoto($post));
         }
-        $post->city()->delete();
         $post->delete();
         Session::flash('post-deletion', 'پست مورد نظر حذف شد');
         return redirect()->back();

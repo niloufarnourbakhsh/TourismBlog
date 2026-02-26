@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Redis;
 
 class PostResource extends JsonResource
 {
@@ -14,6 +15,14 @@ class PostResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+//        return parent::toArray($request);
+        return [
+            'id'=>$this->id,
+            'title'=>$this->title,
+            'body'=>$this->body,
+            "city"=>$this->city?->name,
+            'views' => Redis::get('view.'.$this->id),
+            'like_counts'=>$this->whenLoaded('likes')->count()
+        ];
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\cityController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\GalleryController;
@@ -36,6 +37,7 @@ Route::middleware('can:is_admin')->group(function (){
     Route::patch('/posts/active/{post}',[PostController::class,'active'])->name('posts.active');
     Route::delete('/photo/{post}/{photo}',PhotoController::class)->name('photo');
     Route::resource('categories',CategoryController::class);
+    Route::resource('cities',cityController::class)->only(['index','update','store','destroy']);
 });
 
 Route::middleware('auth')->group(function (){
